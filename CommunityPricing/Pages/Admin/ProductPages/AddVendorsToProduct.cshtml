@@ -1,0 +1,102 @@
+﻿@page "{id:Guid}"
+@model CommunityPricing.Pages.Admin.ProductPages.AddVendorsToProductModel
+
+@{
+    ViewData["Title"] = "AddVendorsToProduct";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>AddVendorsToProduct</h2>
+
+
+<form asp-page="./AddVendorsToProduct" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default">
+            <a asp-page="./AddVendorsToProduct" asp-route-id="@Model.ProductID">Back To Full List</a>
+        </p>
+    </div>
+</form>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" name="productId" value="@Model.ProductID">
+    <input type="hidden" asp-for="@Model.CurrentSort">
+    <input type="hidden" asp-for="@Model.CurrentFilter">
+    <input type="hidden" asp-for="@Model.PageIndex">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DesignatedVendorList[0].Designated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DesignatedVendorList[0].VendorID)
+                </th>
+                <th>
+                    <a asp-page="./AddVendorsToProduct" asp-route-id="@Model.ProductID" asp-route-sortOrder="@Model.NameSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
+                        @Html.DisplayNameFor(model => model.DesignatedVendorList[0].VendorName)
+                    </a>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DesignatedVendorList)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden"
+                               name="sortedVendors"
+                               value="@item.VendorID"
+                               @Html.Raw(item.VendorID) />
+
+                        <input type="checkbox"
+                               name="selectedVendors"
+                               value="@item.VendorID"
+                               @(Html.Raw(item.Designated ? "checked=\"checked\"" : "")) />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorName)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-group">
+        <input type="submit" name="AddVendor" value="Save" class="btn btn-default">
+    </div>
+    <div class="form-group">
+        <input type="submit" name="AddVendor" value="SaveAndAdd" class="btn btn-default">
+    </div>
+
+    <a asp-page="./Index" >Back to Products</a>
+</form>
+
+@{
+    var prevDisabled = !Model.Vendor.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Vendor.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./AddVendorsToProduct"
+   asp-route-id="@Model.ProductID"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Vendor.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./AddVendorsToProduct"
+   asp-route-id="@Model.ProductID"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Vendor.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

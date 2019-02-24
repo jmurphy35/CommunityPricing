@@ -1,0 +1,74 @@
+﻿@page "{id:int?}"
+@model CommunityPricing.Pages.Admin.VendorPages.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Vendor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.OwnerID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendor.OwnerID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.VendorName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendor.VendorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.VendorAddress1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendor.VendorAddress1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.VendorAddress2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendor.VendorAddress2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.Offering)
+        </dt>
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>OfferingID</th>
+                    <th>ProductID</th>
+                    <th>ProductPricePerWeight</th>
+                </tr>
+                @foreach (var item in Model.Vendor.Offering)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.OfferingID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ProductID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ProductPricePerWeight)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </dd>
+
+
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Vendor.VendorID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

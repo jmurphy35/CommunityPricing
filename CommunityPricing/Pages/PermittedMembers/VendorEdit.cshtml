@@ -1,0 +1,53 @@
+﻿@page "{id:int}"
+@model CommunityPricing.Pages.PermittedMembers.VendorEditModel
+
+@{
+    ViewData["Title"] = "VendorEdit";
+    Layout = "~/Pages/PermittedMembers/_PMLayout.cshtml";
+}
+
+<h2>VendorEdit</h2>
+
+<h4>Vendor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Vendor.VendorID" />
+            <div class="form-group">
+                <label asp-for="Vendor.OwnerID" class="control-label"></label>
+                <input asp-for="Vendor.OwnerID" class="form-control" />
+                <span asp-validation-for="Vendor.OwnerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendor.VendorName" class="control-label"></label>
+                <input asp-for="Vendor.VendorName" class="form-control" />
+                <span asp-validation-for="Vendor.VendorName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendor.VendorAddress1" class="control-label"></label>
+                <input asp-for="Vendor.VendorAddress1" class="form-control" />
+                <span asp-validation-for="Vendor.VendorAddress1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendor.VendorAddress2" class="control-label"></label>
+                <input asp-for="Vendor.VendorAddress2" class="form-control" />
+                <span asp-validation-for="Vendor.VendorAddress2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<p class="dl-horizontal">
+    <a asp-page="./PMGate" class="dl-horizontal">Back to Gate</a>
+      ||  
+    <a asp-page="./OfferingEdit" asp-route-id="@Model.Vendor.VendorID" class="dl-horizontal">Edit your prices</a>
+</p>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

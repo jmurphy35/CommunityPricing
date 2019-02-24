@@ -1,0 +1,61 @@
+﻿@page "{id:int?}"
+@model CommunityPricing.Pages.Admin.ProductCategoryPages.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProductCategory</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCategory.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductCategory.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCategory.ProductCategoryID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductCategory.ProductCategoryID)
+        </dd>
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>ProductName</th>
+                    <th>Product Description</th>
+                    <th>Product Weight or Volume</th>
+                    <th>Product Wholesaler</th>
+                </tr>
+                @foreach (var product in Model.ProductCategory.Product)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(ModelItem => product.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelItem => product.ProductDescr1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelItem => product.ProductDescr2_Wt_Vol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelItem => product.Wholesaler)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.ProductCategory.ProductCategoryID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

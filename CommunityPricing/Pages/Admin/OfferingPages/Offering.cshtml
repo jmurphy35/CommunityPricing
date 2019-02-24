@@ -1,0 +1,158 @@
+﻿@page
+@model CommunityPricing.Pages.Admin.OfferingPages.OfferingModel
+
+@{
+    ViewData["Title"] = "Offering";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Offering</h2>
+
+<form asp-page="./Offering" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <input type="text" name="searchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default">
+            <a asp-page="./Offering">Back To Full List</a>
+        </p>
+    </div>
+</form>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @foreach (var item in Model.Offering)
+    {
+        <input type="hidden" asp-for="@item.RowVersion">
+    }
+
+    @Model.Message
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="@Model.CurrentSort">
+        <input type="hidden" asp-for="@Model.CurrentFilter">
+        <input type="hidden" asp-for="@Model.PageIndex">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].OfferingID)
+                    </th>
+                    <th>
+                        <a asp-page="./Offering" asp-route-sortOrder="@Model.NameSort"
+                           asp-route-currentFilter="@Model.CurrentFilter">
+                            @Html.DisplayNameFor(model => model.Offering[0].Product.ProductName)
+                        </a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].Product.ProductDescr1)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].Product.Wholesaler)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].ProductID)
+                    </th>
+                    <th>
+                        New PPW
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].ProductPricePerWeight)
+                    </th>
+                    <th>
+                        New asofDate
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].AsOfDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].VendorID)
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (int i = 0; i < Model.Offering.Count; i++)
+                {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].OfferingID)
+                        @Html.DisplayFor(o => o.Offering[i].OfferingID)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].Product.ProductName)
+                        @Html.DisplayFor(o => o.Offering[i].Product.ProductName)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr1)
+                        @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr1)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].Product.Wholesaler)
+                        @Html.DisplayFor(o => o.Offering[i].Product.Wholesaler)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].ProductID)
+                        @Html.DisplayFor(o => o.Offering[i].ProductID)
+                    </td>
+                    <td>
+                        @Html.EditorFor(o => o.Offering[i].ProductPricePerWeight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => o.Offering[i].ProductPricePerWeight)
+                    </td>
+                    <td>
+                        @Html.EditorFor(o => o.Offering[i].AsOfDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(o => o.Offering[i].AsOfDate)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].Vendor.VendorName)
+                        @Html.DisplayFor(o => o.Offering[i].Vendor.VendorName)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].VendorID)
+                        @Html.DisplayFor(o => o.Offering[i].VendorID)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].RowVersion)
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </form>
+}
+
+
+@{
+    var prevDisabled = !Model.Offering.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Offering.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Offering"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Offering.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./Offering"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Offering.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

@@ -1,0 +1,98 @@
+﻿@page "{productId:Guid?}"
+@model CommunityPricing.Pages.GeneralPublic.ProductDetailModel
+
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h3>Compare Community Prices</h3>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductDescr1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductDescr1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductDescr2_Wt_Vol)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductDescr2_Wt_Vol)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Wholesaler)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Wholesaler)
+        </dd>
+
+        <dt>
+            <a asp-page="./ProductDetail" asp-route-sortorder="@Model.PriceSort">
+                @Html.DisplayNameFor(model => model.Product.Offering)
+            </a>
+        </dt>
+        <dd>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Vendor Name</th> 
+                        <th>Address</th>
+                        <th></th>
+                        <th>
+                            <a asp-page="./ProductDetail" asp-route-sortorder="@Model.PriceSort">
+                                Price per Unit
+                            </a>
+                        </th>
+                        <th>Date</th>
+
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Offerings)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Vendor.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Vendor.VendorAddress1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Vendor.VendorAddress2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ProductPricePerWeight)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.AsOfDate)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+
+</div>
+<div>
+    <a asp-page="./ProductIndex" asp-route-productCategoryId="@Model.Product.ProductCategoryID">Back to List</a>
+</div>
+
+<div>
+
+
+    <p>
+        The "Date" column to the right of the "Price per Unit"
+        is the date that its price was observed at the vendor.
+    </p>
+
+</div>

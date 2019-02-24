@@ -1,0 +1,95 @@
+﻿@page
+@model CommunityPricing.Pages.Admin.ProductPages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <input type="text" name="searchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default">
+            <a asp-page="./Index">Back To Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Product[0].ProductName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductDescr1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductDescr2_Wt_Vol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].Wholesaler)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductCategory)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Product)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDescr1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDescr2_Wt_Vol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Wholesaler)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCategory.ProductCategoryID)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ProductID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{ var prevDisabled = !Model.Product.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Product.HasNextPage ? "disabled" : "";}
+
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Product.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Product.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

@@ -1,0 +1,156 @@
+﻿@page "{id:int}"
+@model CommunityPricing.Pages.PermittedMembers.OfferingEditModel
+
+@{
+    ViewData["Title"] = "OfferingEdit";
+    Layout = "~/Pages/PermittedMembers/_PMLayout.cshtml";
+}
+
+<h2>OfferingEdit</h2>
+
+
+<form asp-page="./OfferingEdit" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default">
+            <a asp-page="./OfferingEdit">Back To Full List</a>
+        </p>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.Offering[0].VendorID)</dt>
+            <dd>@Html.DisplayFor(model => model.Offering[0].VendorID)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorName)</dt>
+            <dd>@Html.DisplayFor(model => model.Offering[0].Vendor.VendorName)</dd>
+        </dl>
+    </div>
+</form>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @foreach (var item in Model.Offering)
+    {
+        <input type="hidden" asp-for="@item.RowVersion">
+    }
+
+    @Model.Message
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.VendorId">
+            <input type="hidden" asp-for="@Model.CurrentSort">
+            <input type="hidden" asp-for="@Model.CurrentFilter">
+            <input type="hidden" asp-for="@Model.PageIndex">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Offering[0].Product.ProductName)
+                        </th>
+                        <th>
+                            <a asp-page="./OfferingEdit" asp-route-sortOrder="@Model.WholesalerSort"
+                               asp-route-currentFilter="@Model.CurrentFilter">
+                                @Html.DisplayNameFor(model => model.Offering[0].Product.Wholesaler)
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="./OfferingEdit" asp-route-sortOrder="@Model.ProductTypeSort"
+                               asp-route-currentFilter="@Model.CurrentFilter">
+                                @Html.DisplayNameFor(model => model.Offering[0].Product.ProductDescr1)
+                            </a>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Offering[0].Product.ProductDescr2_Wt_Vol)
+                        </th>
+                        <th>
+                            Enter price changes:
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Offering[0].ProductPricePerWeight)
+                        </th>
+                        <th>
+                            Enter date:
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.Offering[0].AsOfDate)
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Offering.Count; i++)
+                    {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].Product.ProductName)
+                            @Html.DisplayFor(o => o.Offering[i].Product.ProductName)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].Product.Wholesaler)
+                            @Html.DisplayFor(o => o.Offering[i].Product.Wholesaler)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr1)
+                            @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr1)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
+                            @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
+
+                        </td>
+                        <td>
+                            @Html.EditorFor(o => o.Offering[i].ProductPricePerWeight)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(o => o.Offering[i].ProductPricePerWeight)
+                        </td>
+                        <td>
+                            @Html.EditorFor(o => o.Offering[i].AsOfDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(o => o.Offering[i].AsOfDate)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].OfferingID)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(o => o.Offering[i].RowVersion)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+}
+
+@{
+    var prevDisabled = !Model.Offering.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Offering.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./OfferingEdit"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Offering.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./OfferingEdit"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Offering.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+
+<p class="dl-horizontal">
+
+    <a asp-page="./PMGate" class="dl-horizontal">Back to Gate</a>
+    ||
+    <a asp-page="./VendorEdit" asp-route-id="@Model.VendorId" class="dl-horizontal">Edit your Vendor info.</a>
+
+</p>

@@ -1,0 +1,71 @@
+﻿@page
+@model CommunityPricing.Pages.GeneralPublic.ProductCategoryIndexModel
+
+@{
+    ViewData["Title"] = "ProductCategoryIndex";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Index of Product Categories</h2>
+
+<form asp-page="./ProductCategoryIndex" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default">
+            <a asp-page="./ProductCategoryIndex">Back To Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./ProductCategoryIndex" asp-route-sortOrder="@Model.NameSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.ProductCategory[0].Name)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCategory[0].ProductCategoryID)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductCategory)
+        {
+        <tr>
+            <td>
+                <a asp-page="./ProductIndex" asp-route-productCategoryID="@item.ProductCategoryID">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+            </td>
+            <td>
+                <a asp-page="./ProductIndex" asp-route-productCategoryID="@item.ProductCategoryID">
+                    @Html.DisplayFor(modelItem => item.ProductCategoryID)
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.ProductCategory.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.ProductCategory.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./ProductCategoryIndex"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.ProductCategory.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./ProductCategoryIndex"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.ProductCategory.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

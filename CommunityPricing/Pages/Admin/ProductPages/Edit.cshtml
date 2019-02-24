@@ -1,0 +1,63 @@
+﻿@page "{id:Guid?}"
+@model CommunityPricing.Pages.Admin.ProductPages.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Product.ProductID" />
+            <input type="hidden" asp-for="Product.RowVersion " />
+            <div class="form-group">
+                <label asp-for="Product.ProductName" class="control-label"></label>
+                <input asp-for="Product.ProductName" class="form-control" />
+                <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductDescr1" class="control-label"></label>
+                <input asp-for="Product.ProductDescr1" class="form-control" />
+                <span asp-validation-for="Product.ProductDescr1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductDescr2_Wt_Vol" class="control-label"></label>
+                <input asp-for="Product.ProductDescr2_Wt_Vol" class="form-control" />
+                <span asp-validation-for="Product.ProductDescr2_Wt_Vol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Wholesaler" class="control-label"></label>
+                <input asp-for="Product.Wholesaler" class="form-control" />
+                <span asp-validation-for="Product.Wholesaler" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductCategoryID" class="control-label"></label>
+                <select asp-for="Product.ProductCategoryID" class="form-control" asp-items="@Model.ProductCategorySL"></select>
+                <span asp-validation-for="Product.ProductCategoryID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" name="submitProduct" value="Save" class="btn btn-default" />
+            </div>
+            <div class="form-group">
+                <input type="submit" name="submitProduct" value="SaveAndEditVendors" class="btn btn-default" />
+            </div>
+
+        </form>
+        
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
