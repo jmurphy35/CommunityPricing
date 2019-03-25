@@ -32,7 +32,7 @@ namespace CommunityPricing.Pages.GeneralPublic
         public Product Product { get; set; }
         public Vendor Vendor { get; set; }
         public List<Offering> Offerings { get; set; }
-
+        
 
         public async Task<IActionResult> OnGetAsync(Guid? productId, string sortOrder)
         {

@@ -147,6 +147,7 @@ namespace CommunityPricing.Pages.PermittedMembers
             {
                 
                 await _context.SaveChangesAsync();
+                await ArchiveOffering.Archive(_context);
                 Message = null;
                 return RedirectToPage("./OfferingEdit", new
                 {

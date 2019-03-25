@@ -1,0 +1,69 @@
+﻿@page
+@model CommunityPricing.Pages.Admin.AdminArchiveModel
+
+@{
+    ViewData["Title"] = "AdminArchive";
+    Layout = "~/Pages/Admin/_AdminLayout.cshtml";
+}
+
+<h2>AdminArchive</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./AdminArchive" asp-route-sortOrder="@Model.VendorNameSort">
+                    @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./AdminArchive" asp-route-sortOrder="@Model.ProductNameSort">
+                    @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Product.ProductName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Product.ProductDescr1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Product.Wholesaler)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ArchivedOffering) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offering.Vendor.VendorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offering.Product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offering.Product.ProductDescr1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offering.Product.Wholesaler)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ArchivedOfferingID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ArchivedOfferingID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ArchivedOfferingID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

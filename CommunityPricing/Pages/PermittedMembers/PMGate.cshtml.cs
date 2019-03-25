@@ -38,7 +38,14 @@ namespace CommunityPricing.Pages.PermittedMembers
             authVendor = false;
                    
             var userId = UserManager.GetUserId(User);
-            Vendor vendorToMatch = await _context.Vendor.FirstOrDefaultAsync(v => v.OwnerID == userId);
+            //Vendor vendorToMatch = await _context.Vendor.FirstOrDefaultAsync(v => v.OwnerID == userId);
+            
+            List<Vendor> vendorToMatchList = new List<Vendor>();
+            foreach (var vendor in _context.Vendor)
+            {
+                if (vendor.OwnerID == userId)
+                    vendorToMatchList.Add(vendor);
+            }
             
             if(id != null)
             {
@@ -54,9 +61,9 @@ namespace CommunityPricing.Pages.PermittedMembers
                     }
                     else
                     {
-                        if (vendorToMatch != null)
+                        if (vendorToMatchList != null)
                         {
-                            if (vendorToMatch.VendorID == id)
+                            if (vendorToMatchList.Any(v => v.VendorID == id))
                             {
                                 VendorId = id;
                                 authVendor = true;

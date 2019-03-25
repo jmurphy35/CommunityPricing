@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
+using CommunityPricing.Pages.Shared;
 
 
 namespace CommunityPricing.Pages
@@ -12,9 +13,10 @@ namespace CommunityPricing.Pages
     [AllowAnonymous]
     public class IndexModel : PageModel
     {
+        public decimal Average { get; set; }
         public void OnGet()
         {
-
+          
         }
     }
 }

@@ -114,11 +114,10 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
 
             }
             try
-            {
-                
-                await ArchiveOffering.Archive(_context);
+            {  
                 await _context.SaveChangesAsync();
-                
+                await ArchiveOffering.Archive(_context);
+
                 Message = null;
                 return RedirectToPage("./Offering", new
                 {

@@ -1,21 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityPricing.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using CommunityPricing.Areas.Data;
-using CommunityPricing.Areas.Authorization;
-using CommunityPricing.Pages.Shared;
 using Microsoft.EntityFrameworkCore;
 using CommunityPricing.Data;
-
-
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 
 namespace CommunityPricing.Pages.Shared
 {
@@ -32,7 +21,7 @@ namespace CommunityPricing.Pages.Shared
 
         public static async Task Archive(CommunityPricingContext _context)
         {
-            ArchivedOfferings = _context.ArchivedOffering.ToList();
+            ArchivedOfferings = await _context.ArchivedOffering.ToListAsync();
             List<Offering> offerings = await _context.Offering.ToListAsync();
 
             foreach (var offering in offerings)
@@ -40,8 +29,8 @@ namespace CommunityPricing.Pages.Shared
             //If I already have that guid in my archives, then get out
             //...maybe send a message up the ranks too.
 
-            if (!(ArchivedOfferings.Select(aO => aO.OfferingID).Contains(offering.OfferingID)
-                    && ArchivedOfferings.Select(aO => aO.Date).Contains(offering.AsOfDate)))
+                if(!ArchivedOfferings.Any(aO => aO.OfferingID == offering.OfferingID
+                && aO.Date == offering.AsOfDate))
                 {
                     ArchivedOffering archivedOffering = new ArchivedOffering();
                     archivedOffering.ArchivedOfferingID = Guid.NewGuid();
@@ -61,16 +50,16 @@ namespace CommunityPricing.Pages.Shared
                 }
                 else
                 {
-                    var archivedOfferingToUpdate = await _context.ArchivedOffering
-                        .FirstOrDefaultAsync(aO => aO.OfferingID == offering.OfferingID
-                        && aO.Date == offering.AsOfDate);
+                    var archivedOfferingToUpdate = await _context.ArchivedOffering.FirstOrDefaultAsync(
+                        aO => aO.OfferingID == offering.OfferingID && aO.Date == offering.AsOfDate);
 
-                    if(archivedOfferingToUpdate.Price != offering.ProductPricePerWeight)
+
+                    if (archivedOfferingToUpdate.Price != offering.ProductPricePerWeight)
                     {
                         _context.Entry(archivedOfferingToUpdate).Property("Price")
                             .CurrentValue = offering.ProductPricePerWeight;
                     }
-                }
+                }  
             }
 
             try
@@ -81,6 +70,11 @@ namespace CommunityPricing.Pages.Shared
             {
                 throw;
             }
+        }
+        public Decimal[] ArchivedPrices()
+        {
+            decimal[] me = { 1M};
+            return me;
         }
     }
 }
