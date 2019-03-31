@@ -1,5 +1,6 @@
 ﻿@page "{productId:Guid?}"
 @model CommunityPricing.Pages.GeneralPublic.ProductDetailModel
+@using CommunityPricing.Pages.Shared;
 
 @{
     ViewData["Title"] = "ProductDetail";
@@ -46,7 +47,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Vendor Name</th> 
+                        <th>Vendor Name</th>
                         <th>Address</th>
                         <th></th>
                         <th>
@@ -54,8 +55,8 @@
                                 Price per Unit
                             </a>
                         </th>
+                        <th>Average</th>
                         <th>Date</th>
-
                     </tr>
                 </thead>
                 @foreach (var item in Model.Offerings)
@@ -72,6 +73,11 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => item.ProductPricePerWeight)
+                        </td>
+                        <td>
+                            @{ List<decimal> num = (@Model.archOff.ArchivedPrices(item.OfferingID));
+                                var ave = Averager.FindAverage(num.Count, num);}
+                            @Html.DisplayFor(model => ave)
                         </td>
                         <td>
                             @Html.DisplayFor(model => item.AsOfDate)
@@ -91,8 +97,10 @@
 
 
     <p>
-        The "Date" column to the right of the "Price per Unit"
-        is the date that its price was observed at the vendor.
+        The "Date" is the date that its price was last observed at the vendor.
+    </p>
+    <p>
+        The "Average" includes only those prices that were observed.
     </p>
 
 </div>

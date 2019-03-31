@@ -7,17 +7,16 @@ namespace CommunityPricing.Pages.Shared
 {
     public class Averager
     {
-        public decimal Average { get; set; }
+        public static decimal Average { get; set; }
         
-        public decimal FindAverage(int den, decimal[] array)
+        public static decimal FindAverage(int den, List<decimal> numList)
         {
-            decimal numerator = 0.0M;
-            var arrayList = array.ToList();
-            for (int i = 0; i < arrayList.Count; i++)
+            decimal num = 0.0M;
+            for (int i = 0; i < numList.Count; i++)
             {
-                numerator = numerator + arrayList[i];
+                num = num + numList[i];
             }
-            Average = numerator / den;
+            Average = num / den;
             return Average;
         }
     }

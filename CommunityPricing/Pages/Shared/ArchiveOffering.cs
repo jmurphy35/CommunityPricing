@@ -71,10 +71,21 @@ namespace CommunityPricing.Pages.Shared
                 throw;
             }
         }
-        public Decimal[] ArchivedPrices()
+        public List<decimal> ArchivedPrices(Guid offeringId)
         {
-            decimal[] me = { 1M};
-            return me;
+            List<decimal> archivedPrices = new List<decimal>();
+            var aOffering = _context.ArchivedOffering.Where(a => a.OfferingID == offeringId);
+         
+            foreach (var ao in aOffering)
+            {
+                if(ao.Price.HasValue)
+                {
+                    archivedPrices.Add((decimal)ao.Price);
+                }
+            }
+            
+            
+            return archivedPrices;
         }
     }
 }

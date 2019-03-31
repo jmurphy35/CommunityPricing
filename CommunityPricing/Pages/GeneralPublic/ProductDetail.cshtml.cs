@@ -32,7 +32,9 @@ namespace CommunityPricing.Pages.GeneralPublic
         public Product Product { get; set; }
         public Vendor Vendor { get; set; }
         public List<Offering> Offerings { get; set; }
+        public ArchiveOffering archOff { get; set; }
         
+
 
         public async Task<IActionResult> OnGetAsync(Guid? productId, string sortOrder)
         {
@@ -64,7 +66,9 @@ namespace CommunityPricing.Pages.GeneralPublic
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ProductID == productId);
 
-            
+            archOff = new ArchiveOffering(_context);
+
+
 
             if (Product == null)
             {
