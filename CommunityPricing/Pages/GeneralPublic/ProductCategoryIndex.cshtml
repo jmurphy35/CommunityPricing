@@ -10,11 +10,11 @@
 
 <form asp-page="./ProductCategoryIndex" method="get">
     <div class="form-actions no-color">
-        <p>
+        @*<p>
             Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
             <input type="submit" value="Search" class="btn btn-default">
             <a asp-page="./ProductCategoryIndex">Back To Full List</a>
-        </p>
+        </p>*@
     </div>
 </form>
 
@@ -27,9 +27,9 @@
                     @Html.DisplayNameFor(model => model.ProductCategory[0].Name)
                 </a>
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.ProductCategory[0].ProductCategoryID)
-            </th>
+            </th>*@
         </tr>
     </thead>
     <tbody>
@@ -41,11 +41,11 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </a>
             </td>
-            <td>
+            @*<td>
                 <a asp-page="./ProductIndex" asp-route-productCategoryID="@item.ProductCategoryID">
                     @Html.DisplayFor(modelItem => item.ProductCategoryID)
                 </a>
-            </td>
+            </td>*@
         </tr>
         }
     </tbody>

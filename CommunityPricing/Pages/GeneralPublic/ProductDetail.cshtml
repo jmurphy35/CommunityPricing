@@ -39,9 +39,7 @@
         </dd>
 
         <dt>
-            <a asp-page="./ProductDetail" asp-route-sortorder="@Model.PriceSort">
-                @Html.DisplayNameFor(model => model.Product.Offering)
-            </a>
+            @Html.DisplayNameFor(model => model.Product.Offering)
         </dt>
         <dd>
             <table class="table">
@@ -55,32 +53,35 @@
                                 Price per Unit
                             </a>
                         </th>
-                        <th>Average</th>
+                        <th>
+                            <a asp-page="./ProductDetail" asp-route-sortorder="@Model.AverageSort">
+                                Average
+                            </a>
+                        </th>
                         <th>Date</th>
                     </tr>
                 </thead>
-                @foreach (var item in Model.Offerings)
+                @foreach (var item in Model.DisplayDetailHelper)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(model => item.Vendor.VendorName)
+                            @Html.DisplayFor(model => item.VendorName)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Vendor.VendorAddress1)
+                            @Html.DisplayFor(model => item.VendorAddress)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Vendor.VendorAddress2)
+                            @Html.DisplayFor(model => item.VendorAddress2)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.ProductPricePerWeight)
+
+                            @Html.DisplayFor(model => item.PricePerUnit)
                         </td>
                         <td>
-                            @{ List<decimal> num = (@Model.archOff.ArchivedPrices(item.OfferingID));
-                                var ave = Averager.FindAverage(num.Count, num);}
-                            @Html.DisplayFor(model => ave)
+                            @Html.DisplayFor(model => item.Average)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.AsOfDate)
+                            @Html.DisplayFor(model => item.asOfDate)
                         </td>
                     </tr>
                 }
@@ -100,7 +101,7 @@
         The "Date" is the date that its price was last observed at the vendor.
     </p>
     <p>
-        The "Average" includes only those prices that were observed.
+        The "Average" is derived only from prices on dates that that price was observed.
     </p>
 
 </div>

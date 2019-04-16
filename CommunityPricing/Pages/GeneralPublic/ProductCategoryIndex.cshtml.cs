@@ -68,7 +68,7 @@ namespace CommunityPricing.Pages.GeneralPublic
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 20;
             ProductCategory = await PaginatedList<ProductCategory>.CreateAsync(ProductCategoryIQ.AsNoTracking(),
                 pageIndex ?? 1, pageSize);
            

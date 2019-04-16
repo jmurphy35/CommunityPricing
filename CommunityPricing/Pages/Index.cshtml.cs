@@ -20,13 +20,10 @@ namespace CommunityPricing.Pages
         {
             _context = context;
         }
-        public decimal Average { get; set; }
+        
         public void OnGet()
         {
 
-            ArchiveOffering aO = new ArchiveOffering(_context);
-            var prices = aO.ArchivedPrices(Guid.Parse("540f14b2-e64d-48fc-7328-08d6a4b81485"));
-            Averager.FindAverage(4, prices);
         }
     }
 }

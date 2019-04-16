@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CommunityPricing.Data;
 using CommunityPricing.Models;
+using CommunityPricing.Areas.Models.HelperModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using CommunityPricing.Areas.Data;
@@ -28,31 +29,46 @@ namespace CommunityPricing.Pages.GeneralPublic
             _context = context;
         }
         public string PriceSort { get; set; }
+        public string AverageSort { get; set; }
         public string CurrentSort { get; set; }
         public Product Product { get; set; }
         public Vendor Vendor { get; set; }
         public List<Offering> Offerings { get; set; }
         public ArchiveOffering archOff { get; set; }
-        
-
+        public List<DisplayDetailHelper> DisplayDetailHelper{ get; set; }
+        public string notAvailable { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? productId, string sortOrder)
         {
+            CurrentSort = sortOrder;
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+            AverageSort = sortOrder == "Average" ? "average_desc" : "Average";
+
             IQueryable<Offering> offeringIQ = from o in _context.Offering.Where(o => o.ProductID == productId).Include(v => v.Vendor)
                                               select o;
-                                             
-                                            
+
+            Offerings = await offeringIQ.AsNoTracking().ToListAsync();
+            DisplayDetailHelper = MapToHelper(Offerings);
+
             switch (sortOrder)
             {
                 case "price_desc":
-                    offeringIQ = offeringIQ.OrderByDescending(o => o.ProductPricePerWeight);
+                    DisplayDetailHelper = DisplayDetailHelper.OrderByDescending(d => d.PricePerUnit).ToList();
                     break;
+
+                case "Average":
+                    DisplayDetailHelper = DisplayDetailHelper.OrderBy(d => d.Average).ToList();
+                    break;
+
+                case "average_desc":
+                    DisplayDetailHelper = DisplayDetailHelper.OrderByDescending(d => d.Average).ToList();
+                    break;
+
                 default:
-                    offeringIQ = offeringIQ.OrderBy(o => o.ProductPricePerWeight);
+                    DisplayDetailHelper = DisplayDetailHelper.OrderBy(d => d.PricePerUnit).ToList();
                     break;
             }
-            Offerings = await offeringIQ.AsNoTracking().ToListAsync();
+            
 
             if (productId == null)
             {
@@ -75,6 +91,29 @@ namespace CommunityPricing.Pages.GeneralPublic
                 return NotFound();
             }
             return Page();
+        }
+
+
+        private List<DisplayDetailHelper> MapToHelper(List<Offering> offeringIQ)
+        {
+            DisplayDetailHelper = new List<DisplayDetailHelper>();
+            foreach (var offering in offeringIQ)
+            {
+                DisplayDetailHelper listItem = new DisplayDetailHelper();
+                listItem.VendorName = offering.Vendor.VendorName;
+                listItem.VendorAddress = offering.Vendor.VendorAddress1;
+                listItem.VendorAddress2 = offering.Vendor.VendorAddress2;
+                listItem.PricePerUnit = offering.ProductPricePerWeight;
+
+                ArchiveOffering arcOf = new ArchiveOffering(_context);
+                List<decimal> num = arcOf.ArchivedPrices(offering.OfferingID);
+                var average = Averager.FindAverage(num.Count, num);
+                listItem.Average = average;
+                listItem.asOfDate = offering.AsOfDate;
+                 
+                DisplayDetailHelper.Add(listItem);
+            }
+            return DisplayDetailHelper;
         }
     }
 }
