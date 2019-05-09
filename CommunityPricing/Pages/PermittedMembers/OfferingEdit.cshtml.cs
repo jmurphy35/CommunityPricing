@@ -112,6 +112,12 @@ namespace CommunityPricing.Pages.PermittedMembers
             int pageSize = 7;
             Offering = await PaginatedList<Offering>.CreateAsync(offeringIQ, pageIndex ?? 1, pageSize);
             PageIndex = Offering.PageIndex;
+            if (Offering.Count == 0)
+            {
+                Message = "None of your offerings have been listed on this site. Please contact " +
+                 "site administrator to include your offering here.";
+            }
+            
             return Page();
         }
 

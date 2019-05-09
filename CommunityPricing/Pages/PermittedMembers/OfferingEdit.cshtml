@@ -17,10 +17,16 @@
             <a asp-page="./OfferingEdit">Back To Full List</a>
         </p>
         <dl class="dl-horizontal">
-            <dt>@Html.DisplayNameFor(model => model.Offering[0].VendorID)</dt>
-            <dd>@Html.DisplayFor(model => model.Offering[0].VendorID)</dd>
-            <dt>@Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorName)</dt>
-            <dd>@Html.DisplayFor(model => model.Offering[0].Vendor.VendorName)</dd>
+            @if (Model.Offering.Count != 0)
+            {
+                <dt>@Html.DisplayNameFor(model => model.Offering[0].VendorID)</dt>
+                <dd>@Html.DisplayFor(model => model.Offering[0].VendorID)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorName)</dt>
+                <dd>@Html.DisplayFor(model => model.Offering[0].Vendor.VendorName)</dd>
+            }
+            else
+            { }
+
         </dl>
     </div>
 </form>
@@ -35,13 +41,15 @@
 
     @Model.Message
 
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@Model.VendorId">
-            <input type="hidden" asp-for="@Model.CurrentSort">
-            <input type="hidden" asp-for="@Model.CurrentFilter">
-            <input type="hidden" asp-for="@Model.PageIndex">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="@Model.VendorId">
+        <input type="hidden" asp-for="@Model.CurrentSort">
+        <input type="hidden" asp-for="@Model.CurrentFilter">
+        <input type="hidden" asp-for="@Model.PageIndex">
 
+        @if (Model.Offering.Count != 0)
+        {
             <table class="table">
                 <thead>
                     <tr>
@@ -75,56 +83,58 @@
                         <th>
                             @Html.DisplayFor(model => model.Offering[0].AsOfDate)
                         </th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.Offering.Count; i++)
                     {
-                    <tr>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].Product.ProductName)
-                            @Html.DisplayFor(o => o.Offering[i].Product.ProductName)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].Product.Wholesaler)
-                            @Html.DisplayFor(o => o.Offering[i].Product.Wholesaler)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr1)
-                            @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr1)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
-                            @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].Product.ProductName)
+                                @Html.DisplayFor(o => o.Offering[i].Product.ProductName)
+                            </td>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].Product.Wholesaler)
+                                @Html.DisplayFor(o => o.Offering[i].Product.Wholesaler)
+                            </td>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr1)
+                                @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr1)
+                            </td>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
+                                @Html.DisplayFor(o => o.Offering[i].Product.ProductDescr2_Wt_Vol)
 
-                        </td>
-                        <td>
-                            @Html.EditorFor(o => o.Offering[i].ProductPricePerWeight)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(o => o.Offering[i].ProductPricePerWeight)
-                        </td>
-                        <td>
-                            @Html.EditorFor(o => o.Offering[i].AsOfDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(o => o.Offering[i].AsOfDate)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].OfferingID)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(o => o.Offering[i].RowVersion)
-                        </td>
-                    </tr>
+                            </td>
+                            <td>
+                                @Html.EditorFor(o => o.Offering[i].ProductPricePerWeight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(o => o.Offering[i].ProductPricePerWeight)
+                            </td>
+                            <td>
+                                @Html.EditorFor(o => o.Offering[i].AsOfDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(o => o.Offering[i].AsOfDate)
+                            </td>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].OfferingID)
+                            </td>
+                            <td>
+                                @Html.HiddenFor(o => o.Offering[i].RowVersion)
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+        }
+    </form>
 }
 
 @{

@@ -38,7 +38,6 @@ namespace CommunityPricing.Pages.PermittedMembers
             authVendor = false;
                    
             var userId = UserManager.GetUserId(User);
-            //Vendor vendorToMatch = await _context.Vendor.FirstOrDefaultAsync(v => v.OwnerID == userId);
             
             List<Vendor> vendorToMatchList = new List<Vendor>();
             foreach (var vendor in _context.Vendor)
