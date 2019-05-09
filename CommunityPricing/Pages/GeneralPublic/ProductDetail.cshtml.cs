@@ -93,7 +93,6 @@ namespace CommunityPricing.Pages.GeneralPublic
             return Page();
         }
 
-
         private List<DisplayDetailHelper> MapToHelper(List<Offering> offeringIQ)
         {
             DisplayDetailHelper = new List<DisplayDetailHelper>();
