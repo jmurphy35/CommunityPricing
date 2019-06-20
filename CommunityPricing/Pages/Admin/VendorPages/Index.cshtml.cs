@@ -69,7 +69,7 @@ namespace CommunityPricing.Pages.Admin.VendorPages
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 9;
             Vendor = await PaginatedList<Vendor>.CreateAsync(
                 VendorIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
 

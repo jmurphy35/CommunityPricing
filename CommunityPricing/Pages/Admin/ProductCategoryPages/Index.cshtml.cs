@@ -69,7 +69,7 @@ namespace CommunityPricing.Pages.Admin.ProductCategoryPages
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 9;
 
             ProductCategory = await PaginatedList<ProductCategory>.CreateAsync(ProductCategoryIQ,
                 pageIndex ?? 1, pageSize);
