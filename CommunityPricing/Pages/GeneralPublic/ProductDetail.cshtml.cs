@@ -106,8 +106,17 @@ namespace CommunityPricing.Pages.GeneralPublic
 
                 ArchiveOffering arcOf = new ArchiveOffering(_context);
                 List<decimal> num = arcOf.ArchivedPrices(offering.OfferingID);
-                var average = Averager.FindAverage(num.Count, num);
-                listItem.Average = average;
+                decimal average = 0; 
+                if(num.Count > 0)
+                {
+                    average = Averager.FindAverage(num.Count, num);
+                    listItem.Average = average;
+                }
+                else
+                {
+                    listItem.Average = null;
+                }
+                
                 listItem.asOfDate = offering.AsOfDate;
                  
                 DisplayDetailHelper.Add(listItem);

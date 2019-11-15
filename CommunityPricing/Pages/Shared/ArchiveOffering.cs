@@ -84,7 +84,6 @@ namespace CommunityPricing.Pages.Shared
                 }
             }
             
-            
             return archivedPrices;
         }
     }

@@ -22,7 +22,8 @@ namespace CommunityPricing.Areas.Models.HelperModels
         [DataType(DataType.Currency)]
         [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "not avail.")]
         public decimal? PricePerUnit { get; set; }
-        public decimal? Average { get; set; }
+        public decimal?
+            Average { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MMM-dd}")]
         public DateTime asOfDate { get; set; }

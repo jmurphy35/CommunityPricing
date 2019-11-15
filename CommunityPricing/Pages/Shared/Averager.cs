@@ -16,7 +16,11 @@ namespace CommunityPricing.Pages.Shared
             {
                 num = num + numList[i];
             }
-            Average = num / den;
+            if (den > 0)
+            {
+                Average = num / den;
+            }
+            else { Average = 0; }
             return Average;
         }
     }
