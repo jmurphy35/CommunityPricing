@@ -27,9 +27,7 @@
                     @Html.DisplayNameFor(model => model.ProductCategory[0].Name)
                 </a>
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.ProductCategory[0].ProductCategoryID)
-            </th>*@
+            
         </tr>
     </thead>
     <tbody>
@@ -41,11 +39,8 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </a>
             </td>
-            @*<td>
-                <a asp-page="./ProductIndex" asp-route-productCategoryID="@item.ProductCategoryID">
-                    @Html.DisplayFor(modelItem => item.ProductCategoryID)
-                </a>
-            </td>*@
+            
+
         </tr>
         }
     </tbody>
