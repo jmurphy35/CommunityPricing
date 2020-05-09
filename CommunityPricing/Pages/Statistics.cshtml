@@ -1,0 +1,67 @@
+﻿@page
+@model CommunityPricing.Pages.GeneralPublic.StatisticsModel
+
+@{
+    ViewData["Title"] = "Statistics";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Statistics</h2>
+
+<h5>Draft inflation</h5>
+@*<h5>Compares the annual price inflation calculated from observed prices with the inflation rates from published sources</h5>*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CalculatedInflation[0].InflationName)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CalculatedInflation[0].FiscalYear)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CalculatedInflation[0].InflationRate)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.CalculatedInflation)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.InflationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FiscalYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InflationRate)
+            </td>
+           
+            <td></td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+@{ var prevDisabled = !Model.CalculatedInflation.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.CalculatedInflation.HasNextPage ? "disabled" : "";}
+
+
+<a asp-page="./Statistics"
+   asp-route-pageIndex="@(Model.CalculatedInflation.PageIndex - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Statistics"
+   asp-route-pageIndex="@(Model.CalculatedInflation.PageIndex + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
