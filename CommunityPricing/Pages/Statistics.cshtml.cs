@@ -46,23 +46,8 @@ namespace CommunityPricing.Pages.GeneralPublic
 
             foreach (var pc in productCategoryIQ)
             {
-                //List<ArchivedOffering> AllArchivedFromCategory = pc.Product.SelectMany(o => o.Offering
-                //.SelectMany(ao => ao.ArchivedOffering.Where(aoVal => aoVal.Price.HasValue))).ToList();
-
-                //   List < Offering> offerings = pc.Product.SelectMany(o => o.Offering).ToList();
-
-                //foreach (var offering in offerings)
-                //{
-                //    var OfferingID = offering.OfferingID;
-                //    List<ArchivedOffering> archivedOfferings = offering.ArchivedOffering.ToList();
-
-                //}
-
-                //DateTime oldestDate = AllArchivedFromCategory.Min(aoDate => aoDate.Date);
-                //GroupByYear(AllArchivedFromCategory, oldestDate, pc.Name);
-
                 List<ArchivedOffering> archivesInCategory = pc.Product.SelectMany(o => o.Offering.SelectMany(ao => ao
-               .ArchivedOffering.Where(aoVal => aoVal.Price.HasValue))).ToList();
+               .ArchivedOffering.Where(aoVal => aoVal.Price.HasValue).Where(aoDate => aoDate.Date != null))).ToList();
 
                 if (archivesInCategory.Count != 0)
                 {
@@ -70,7 +55,6 @@ namespace CommunityPricing.Pages.GeneralPublic
 
                     GroupByYear(archivesInCategory, oldestDate, pc.Name);
                 }
-
             }
             
             int pageSize = 12;
