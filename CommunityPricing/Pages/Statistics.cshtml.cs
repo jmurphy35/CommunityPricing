@@ -30,8 +30,9 @@ namespace CommunityPricing.Pages.GeneralPublic
         }
 
         public PaginatedList<CalculatedInflation> CalculatedInflation { get; set; }
-        
-        
+        public List<CalculatedInflation> calculatedInflations { get; set; }
+
+
         public async Task OnGetAsync(int? pageIndex)
         {
             //This page will have pagination, but not sort, and not filter
@@ -49,14 +50,20 @@ namespace CommunityPricing.Pages.GeneralPublic
                 List<ArchivedOffering> archivesInCategory = pc.Product.SelectMany(o => o.Offering.SelectMany(ao => ao
                .ArchivedOffering.Where(aoVal => aoVal.Price.HasValue).Where(aoDate => aoDate.Date != null))).ToList();
 
+                DateTime oldestDate = archivesInCategory.Min(aoDate => aoDate.Date);
+                int length = DateTime.Now.Year - oldestDate.Year + 1;
                 if (archivesInCategory.Count != 0)
                 {
-                    DateTime oldestDate = archivesInCategory.Min(aoDate => aoDate.Date);
-
-                    GroupByYear(archivesInCategory, oldestDate, pc.Name);
-                }
+                    for (int i = 0; i < length; i++)
+                    {
+                        CalculatedInflation calculatedInflation = GroupByYear(archivesInCategory, oldestDate, pc.Name, i);
+                        calculatedInflations.Add(calculatedInflation);
+                    }                    
+                }          
             }
-            
+            calculatedInflations = calculatedInflations.OrderBy(c => c.InflationName)
+                .ThenByDescending(date => date.FiscalYear).ToList();
+
             int pageSize = 12;
 
             CalculatedInflation = PaginatedList<CalculatedInflation>.CreateNonAsync(calculatedInflations, pageIndex ?? 1, pageSize);

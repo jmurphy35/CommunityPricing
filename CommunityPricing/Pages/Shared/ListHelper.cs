@@ -34,7 +34,7 @@ namespace CommunityPricing.Pages.Shared
         public List<ArchivedOffering> ArchivedOffering { get; set; }
         public List<ProductCategory> ProductCategory { get; set; }
         public List<DesignatedVendor> DesignatedVendorList { get; set; }
-        public List<CalculatedInflation> calculatedInflations { get; set; }
+        
 
         public class XYPOINT
         {
@@ -102,14 +102,10 @@ namespace CommunityPricing.Pages.Shared
                 }
             }
         }
-        public void GroupByYear(List<ArchivedOffering> allPcArchives, DateTime oldestYear, string pcName)
-        {
-            int length = DateTime.Now.Year - oldestYear.Year + 1;
-
-            for (int i = 0; i < length; i++)
-            {
+        public CalculatedInflation GroupByYear(List<ArchivedOffering> allPcArchives, DateTime oldestYear, string pcName, int i)
+        {   
                 List<ArchivedOffering> AnnualOfferings = new List<ArchivedOffering>();
-                
+
                 CalculatedInflation calculatedInflation = new CalculatedInflation();
                 foreach (var ao in allPcArchives)
                 {
@@ -121,21 +117,16 @@ namespace CommunityPricing.Pages.Shared
                 List<Guid> oIds = AnnualOfferings.Select(o => o.OfferingID).Distinct().ToList();
                 List<double> OfferingInflations = new List<double>();
 
-                if (oIds != null)
+                foreach (var id in oIds)
                 {
-                    
-                    foreach (var id in oIds)
+                    List<ArchivedOffering> ArchivesPerOffering = new List<ArchivedOffering>();
+                    ArchivesPerOffering = GroupByOffering(id, AnnualOfferings);
+                    if (ArchivesPerOffering.Count >= 2)
                     {
-                        List<ArchivedOffering> ArchivesPerOffering = new List<ArchivedOffering>();
-                        ArchivesPerOffering = GroupByOffering(id, AnnualOfferings);
-                        if(ArchivesPerOffering.Count >= 2)
-                        {
-                            double inflationForAnOffering = MakeXYPOINTS(ArchivesPerOffering);
-                            OfferingInflations.Add(inflationForAnOffering);
-                        }        
-                    }            
+                        double inflationForAnOffering = MakeXYPOINTS(ArchivesPerOffering);
+                        OfferingInflations.Add(inflationForAnOffering);
+                    }
                 }
-             
                 if (OfferingInflations.Count >= 1)
                 {
                     double averageInflation = TakeAnAverage(OfferingInflations);
@@ -146,11 +137,7 @@ namespace CommunityPricing.Pages.Shared
                 {
                     calculatedInflation = InflationHelper("Not Avail", i, pcName);
                 }
-
-                calculatedInflations.Add(calculatedInflation);
-            }
-            calculatedInflations = calculatedInflations.OrderBy(c => c.InflationName)
-                .ThenByDescending(date => date.FiscalYear).ToList();
+                return calculatedInflation; 
         }
 
         public List<ArchivedOffering> GroupByOffering(Guid id, List<ArchivedOffering> archivedOfferings)
@@ -158,7 +145,7 @@ namespace CommunityPricing.Pages.Shared
             List<ArchivedOffering> ArchivedOfferings = new List<ArchivedOffering>();
             foreach (var archive in archivedOfferings)
             {
-                if(archive.OfferingID == id)
+                if (archive.OfferingID == id)
                 {
                     ArchivedOfferings.Add(archive);
                 }
@@ -174,20 +161,20 @@ namespace CommunityPricing.Pages.Shared
 
         public double MakeXYPOINTS(List<ArchivedOffering> archivedOfferings)
         {
-                List<XYPOINT> xypoints = new List<XYPOINT>();
+            List<XYPOINT> xypoints = new List<XYPOINT>();
 
-                foreach (var archive in archivedOfferings)
-                {   
-                        double aoPrice = (double)archive.Price;
+            foreach (var archive in archivedOfferings)
+            {
+                double aoPrice = (double)archive.Price;
 
-                        XYPOINT xyPoint = new XYPOINT();
-                        xyPoint.X = archive.Date.DayOfYear;
-                        xyPoint.Y = aoPrice;
-                        xypoints.Add(xyPoint);   
-                }
-                    xypoints = xypoints.OrderBy(x => x.X).ToList();
-                    double inflationRate = InflationCalculator(xypoints);
-                 
+                XYPOINT xyPoint = new XYPOINT();
+                xyPoint.X = archive.Date.DayOfYear;
+                xyPoint.Y = aoPrice;
+                xypoints.Add(xyPoint);
+            }
+            xypoints = xypoints.OrderBy(x => x.X).ToList();
+            double inflationRate = InflationCalculator(xypoints);
+
             return inflationRate;
         }
 
@@ -200,6 +187,7 @@ namespace CommunityPricing.Pages.Shared
             calculatedInflation.InflationID = 1000;
             calculatedInflation.InflationName = pcName;
             calculatedInflation.FiscalYear = DateTime.Now.Year - i;
+
             calculatedInflation.InflationRate = inflation;
 
             return calculatedInflation;
@@ -207,7 +195,7 @@ namespace CommunityPricing.Pages.Shared
 
         public double InflationCalculator(List<XYPOINT> xypoints)
         {
-
+            
             double inflationRate = 0;
             double m = 0; double b = 0;
 
@@ -225,16 +213,46 @@ namespace CommunityPricing.Pages.Shared
 
             m = numeratorOfSlope / denominatorOfSlope;
             b = Yavg - (m * Xavg);
+           
+            
+            double startprice = xypoints[FindIndexOfMin(xypoints)].X * m + b;
 
-            double startprice = b;
-
-            double endprice = 365 * m + b;
+            double endprice = xypoints[FindIndexOfMax(xypoints)].X * m + b;
 
             inflationRate = Math.Round((endprice - startprice) / startprice, 5);
 
             return inflationRate;
         }
 
+        public int FindIndexOfMin(List<XYPOINT> xyPoints)
+        {
+            int indexOfMin = 0;
+            XYPOINT min = xyPoints[0];
+            for (int i = 0; i < xyPoints.Count; i++)
+            {
+                if(xyPoints[i].X < min.X)
+                {
+                    min = xyPoints[i];
+                    indexOfMin = i;
+                }
+            }
+            return indexOfMin;
+        }
+
+        public int FindIndexOfMax(List<XYPOINT> xyPoints)
+        {
+            int indexOfMax = 0;
+            XYPOINT max = xyPoints[0];
+            for (int i = 0; i < xyPoints.Count; i++)
+            {
+                if (xyPoints[i].X > max.X)
+                {
+                    max = xyPoints[i];
+                    indexOfMax = i;
+                }
+            }
+            return indexOfMax;
+        }
         public List<string> ListOfPublishedInflations()
         {
             List<string> publishedInflations = new List<string>();

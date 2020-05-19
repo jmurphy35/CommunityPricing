@@ -22,7 +22,7 @@ namespace CommunityPricing.Areas.Models.HelperModels
         [Display(Name = "Published Inflation")]
         public string PublishedInflation { get; set; }
 
-        [Display(Name = "For Year")]
+        [Display(Name = "Year")]
         public int FiscalYear { get; set; }
         public DateTime SinceInception { get; set; }
     }
