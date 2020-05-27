@@ -63,11 +63,11 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             {
                 case "name_desc" :
                     ProductIQ = ProductIQ.OrderByDescending(p => p.ProductName)
-                        .ThenByDescending(p => p.Wholesaler);
+                        .ThenByDescending(p => p.Wholesaler).ThenByDescending(p => p.ProductDescr1);
                     break;
                 default :
                     ProductIQ = ProductIQ.OrderBy(p => p.ProductName)
-                        .ThenByDescending(p => p.Wholesaler);
+                        .ThenByDescending(p => p.Wholesaler).ThenByDescending(p => p.ProductDescr1);
                     break;  
             }
 

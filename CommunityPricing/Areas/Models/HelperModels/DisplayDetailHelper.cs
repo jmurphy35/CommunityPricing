@@ -20,10 +20,11 @@ namespace CommunityPricing.Areas.Models.HelperModels
         public string VendorAddress2 { get; set; }
 
         [DataType(DataType.Currency)]
-        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "not avail.")]
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "not observed")]
         public decimal? PricePerUnit { get; set; }
-        public decimal?
-            Average { get; set; }
+
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "not observed")]
+        public double? Average { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MMM-dd}")]
         public DateTime asOfDate { get; set; }

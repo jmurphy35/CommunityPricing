@@ -17,7 +17,7 @@ using CommunityPricing.Pages.Shared;
 namespace CommunityPricing.Pages.GeneralPublic
 {
     [AllowAnonymous]
-    public class ProductDetailModel : DI_BasePageModel
+    public class ProductDetailModel : ListHelper
     {
         private readonly CommunityPricing.Data.CommunityPricingContext _context;
 
@@ -28,13 +28,14 @@ namespace CommunityPricing.Pages.GeneralPublic
         {
             _context = context;
         }
+
+        public Product Product { get; set; }
         public string PriceSort { get; set; }
         public string AverageSort { get; set; }
         public string CurrentSort { get; set; }
-        public Product Product { get; set; }
         public Vendor Vendor { get; set; }
         public List<Offering> Offerings { get; set; }
-        public ArchiveOffering archOff { get; set; }
+        //public ArchiveOffering archOff { get; set; }
         public List<DisplayDetailHelper> DisplayDetailHelper{ get; set; }
         public string notAvailable { get; set; }
 
@@ -82,9 +83,7 @@ namespace CommunityPricing.Pages.GeneralPublic
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ProductID == productId);
 
-            archOff = new ArchiveOffering(_context);
-
-
+         
 
             if (Product == null)
             {
@@ -104,12 +103,12 @@ namespace CommunityPricing.Pages.GeneralPublic
                 listItem.VendorAddress2 = offering.Vendor.VendorAddress2;
                 listItem.PricePerUnit = offering.ProductPricePerWeight;
 
-                ArchiveOffering arcOf = new ArchiveOffering(_context);
-                List<decimal> num = arcOf.ArchivedPrices(offering.OfferingID);
-                decimal average = 0; 
-                if(num.Count > 0)
+                List<double> archivedprices = GetPricesFromArchives(offering.OfferingID);
+                double average = 0; 
+                if(archivedprices.Count > 0)
                 {
-                    average = Averager.FindAverage(num.Count, num);
+                    average = ReturnAverage(archivedprices);
+                    average = Math.Round(average, 2);
                     listItem.Average = average;
                 }
                 else

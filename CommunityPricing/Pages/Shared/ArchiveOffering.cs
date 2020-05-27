@@ -71,20 +71,6 @@ namespace CommunityPricing.Pages.Shared
                 throw;
             }
         }
-        public List<decimal> ArchivedPrices(Guid offeringId)
-        {
-            List<decimal> archivedPrices = new List<decimal>();
-            var aOffering = _context.ArchivedOffering.Where(a => a.OfferingID == offeringId);
-         
-            foreach (var ao in aOffering)
-            {
-                if(ao.Price.HasValue)
-                {
-                    archivedPrices.Add((decimal)ao.Price);
-                }
-            }
-            
-            return archivedPrices;
-        }
+        
     }
 }

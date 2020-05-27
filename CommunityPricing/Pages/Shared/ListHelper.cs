@@ -27,10 +27,9 @@ namespace CommunityPricing.Pages.Shared
             _context = context;
         }
 
-        public List<Product> Product { get; set; }
-        public Offering Offering { get; set; }
-        public List<Offering> Offerings { get; set; }
-        public List<Vendor> Vendors { get; set; }
+        
+        //public Offering Offering { get; set; }
+        //public List<Vendor> Vendors { get; set; }
         public List<ArchivedOffering> ArchivedOffering { get; set; }
         public List<ProductCategory> ProductCategory { get; set; }
         public List<DesignatedVendor> DesignatedVendorList { get; set; }
@@ -42,8 +41,8 @@ namespace CommunityPricing.Pages.Shared
             public double Y { get; set; }
         }
 
-        public static SortedDictionary<int, int> myDictionaryX { get; set; }
-        public static SortedDictionary<int, double> myDictionaryY { get; set; }
+        //public static SortedDictionary<int, int> myDictionaryX { get; set; }
+        //public static SortedDictionary<int, double> myDictionaryY { get; set; }
 
 
         public List<DesignatedVendor> MakeDesignatedVendorList(List<Vendor> vendorList, Guid productId)
@@ -102,6 +101,22 @@ namespace CommunityPricing.Pages.Shared
                 }
             }
         }
+
+        public List<double> GetPricesFromArchives(Guid offeringId)
+        {
+            List<double> archivedPrices = new List<double>();
+            var offering = _context.ArchivedOffering.Where(a => a.OfferingID == offeringId);
+
+            foreach (var ao in offering)
+            {
+                if (ao.Price.HasValue)
+                {
+                    archivedPrices.Add((double)ao.Price);
+                }
+            }
+            return archivedPrices;
+        }
+
         public CalculatedInflation GroupByYear(List<ArchivedOffering> allPcArchives, DateTime oldestYear, string pcName, int i)
         {   
                 List<ArchivedOffering> AnnualOfferings = new List<ArchivedOffering>();
@@ -129,7 +144,7 @@ namespace CommunityPricing.Pages.Shared
                 }
                 if (OfferingInflations.Count >= 1)
                 {
-                    double averageInflation = TakeAnAverage(OfferingInflations);
+                    double averageInflation = ReturnAverage(OfferingInflations);
                     string infl = String.Format("{0:0.00%}", averageInflation);
                     calculatedInflation = InflationHelper(infl, i, pcName);
                 }
@@ -153,11 +168,14 @@ namespace CommunityPricing.Pages.Shared
             return ArchivedOfferings;
         }
 
-        public double TakeAnAverage(List<double> mydoubles)
+        public double ReturnAverage(List<double> mydoubles)
         {
             double doubles = mydoubles.Average();
+            doubles = Math.Round(doubles, 5);
             return doubles;
         }
+
+        
 
         public double MakeXYPOINTS(List<ArchivedOffering> archivedOfferings)
         {

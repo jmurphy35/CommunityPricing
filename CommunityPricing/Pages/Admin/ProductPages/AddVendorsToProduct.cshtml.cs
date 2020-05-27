@@ -67,7 +67,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
                     VendorIQ = VendorIQ.OrderBy(v => v.VendorName);
                     break;
             }
-            int pageSize = 3;
+            int pageSize = 12;
             Vendor = await PaginatedList<Vendor>.CreateAsync(VendorIQ, pageIndex ?? 1, pageSize);
             PageIndex = Vendor.PageIndex;
             MakeDesignatedVendorList(Vendor, id);

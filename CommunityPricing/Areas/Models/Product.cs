@@ -28,7 +28,7 @@ namespace CommunityPricing.Models
         [Column("Weight_Volume")]
         public string ProductDescr2_Wt_Vol { get; set; }
 
-        [DisplayFormat(NullDisplayText = "No identifyable wholesaler")]
+        [DisplayFormat(NullDisplayText = "No wholesaler identified")]
         [StringLength(50, ErrorMessage = "Wholesaler cannot be longer than 50 characters.")]
         public string Wholesaler { get; set; }
 
