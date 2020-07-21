@@ -83,9 +83,6 @@ namespace CommunityPricing.Pages.Admin
             }
 
             ArchivedOffering = archivedOfferingIQ.ToList();
-
-            
-
             return Page();
         }
     }

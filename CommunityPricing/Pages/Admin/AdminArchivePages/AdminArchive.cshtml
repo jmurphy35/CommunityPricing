@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:Guid?}"
 @model CommunityPricing.Pages.Admin.AdminArchiveModel
 
 @{
@@ -28,11 +28,18 @@
                 @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Product.Wholesaler)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorAddress1)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ArchivedOffering[0].Date)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ArchivedOffering[0].Price)
             </th>
+
             <th></th>
         </tr>
     </thead>
@@ -52,6 +59,12 @@
                 @Html.DisplayFor(modelItem => item.Offering.Product.Wholesaler)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Offering.Vendor.VendorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offering.Vendor.VendorAddress1)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
@@ -59,8 +72,6 @@
             </td>
 
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ArchivedOfferingID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ArchivedOfferingID">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.ArchivedOfferingID">Delete</a>
             </td>
         </tr>
