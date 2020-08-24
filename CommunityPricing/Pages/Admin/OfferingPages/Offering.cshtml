@@ -70,6 +70,9 @@
                         @Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorName)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.Offering[0].Vendor.VendorAddress1)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Offering[0].VendorID)
                     </th>
 
@@ -115,6 +118,10 @@
                     <td>
                         @Html.HiddenFor(o => o.Offering[i].Vendor.VendorName)
                         @Html.DisplayFor(o => o.Offering[i].Vendor.VendorName)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(o => o.Offering[i].Vendor.VendorAddress1)
+                        @Html.DisplayFor(o => o.Offering[i].Vendor.VendorAddress1)
                     </td>
                     <td>
                         @Html.HiddenFor(o => o.Offering[i].VendorID)
