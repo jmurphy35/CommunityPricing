@@ -28,8 +28,6 @@ namespace CommunityPricing.Pages.Shared
         }
 
         
-        //public Offering Offering { get; set; }
-        //public List<Vendor> Vendors { get; set; }
         public List<ArchivedOffering> ArchivedOffering { get; set; }
         public List<ProductCategory> ProductCategory { get; set; }
         public List<DesignatedVendor> DesignatedVendorList { get; set; }
@@ -113,46 +111,62 @@ namespace CommunityPricing.Pages.Shared
                 {
                     archivedPrices.Add((double)ao.Price);
                 }
-            }
+            } 
             return archivedPrices;
         }
+        //-------------------------------------------------------------------------------------------------------------
+        public CalculatedInflation MakeCalculatedInflation(List<ArchivedOffering> allPcArchives, string pcName, int i)
+        {
+            CalculatedInflation calculatedInflation;
 
-        public CalculatedInflation GroupByYear(List<ArchivedOffering> allPcArchives, DateTime oldestYear, string pcName, int i)
-        {   
-                List<ArchivedOffering> AnnualOfferings = new List<ArchivedOffering>();
+            List<ArchivedOffering> AnnualArchives = MakeAnnualArchives(allPcArchives, i);
+            List<Guid> distinctIDs = FindDistinctOfferingIDs(AnnualArchives);
+            
+            List<double> inflationsForOfferings = new List<double>();
+            foreach (var id in distinctIDs)
+            {
+                List<XYPOINT> xYPOINTs; 
+                double inflationForOffering;
+                double rationalizedInflation;
+                List<ArchivedOffering> archivesPerOffering = GroupByOffering(id, AnnualArchives);
+                if (archivesPerOffering.Count >= 2)
+                {
+                    xYPOINTs = MakeXYPOINTS(archivesPerOffering);
+                    inflationForOffering = InflationCalculator(xYPOINTs);
+                    rationalizedInflation = RationalizeInlfationForYear(inflationForOffering, xYPOINTs);
+                    rationalizedInflation = Math.Round(rationalizedInflation, 5);
+                    inflationsForOfferings.Add(rationalizedInflation);
+                }
+            }
+            if (inflationsForOfferings.Count >= 1)
+            {
+                double annualPCInflation = ReturnAverage(inflationsForOfferings);
+                string infl = String.Format("{0:0.00%}", annualPCInflation);
+                calculatedInflation = InflationHelper(infl, i, pcName);
+            }
+            else
+            {
+                calculatedInflation = InflationHelper("not avail.", i, pcName);
+            }
+            return calculatedInflation;
+        }
 
-                CalculatedInflation calculatedInflation = new CalculatedInflation();
-                foreach (var ao in allPcArchives)
+        public List<ArchivedOffering> MakeAnnualArchives(List<ArchivedOffering> allPcArchives, int i)
+        {
+            List<ArchivedOffering> AnnualArchives = new List<ArchivedOffering>();
+            foreach (var ao in allPcArchives)
+            {
+                if (ao.Date != null && ao.Price != null && ao.Date.Year == DateTime.Now.Year - i)
                 {
-                    if (ao.Date != null && ao.Price != null && ao.Date.Year == DateTime.Now.Year - i)
-                    {
-                        AnnualOfferings.Add(ao);
-                    }
+                    AnnualArchives.Add(ao);
                 }
-                List<Guid> oIds = AnnualOfferings.Select(o => o.OfferingID).Distinct().ToList();
-                List<double> OfferingInflations = new List<double>();
-
-                foreach (var id in oIds)
-                {
-                    List<ArchivedOffering> ArchivesPerOffering = new List<ArchivedOffering>();
-                    ArchivesPerOffering = GroupByOffering(id, AnnualOfferings);
-                    if (ArchivesPerOffering.Count >= 2)
-                    {
-                        double inflationForAnOffering = MakeXYPOINTS(ArchivesPerOffering);
-                        OfferingInflations.Add(inflationForAnOffering);
-                    }
-                }
-                if (OfferingInflations.Count >= 1)
-                {
-                    double averageInflation = ReturnAverage(OfferingInflations);
-                    string infl = String.Format("{0:0.00%}", averageInflation);
-                    calculatedInflation = InflationHelper(infl, i, pcName);
-                }
-                else
-                {
-                    calculatedInflation = InflationHelper("Not Avail", i, pcName);
-                }
-                return calculatedInflation; 
+            }
+            return AnnualArchives;
+        }
+        public List<Guid> FindDistinctOfferingIDs(List<ArchivedOffering> archivesCurrentYear)
+        {     
+            List<Guid> distinctIDs = archivesCurrentYear.Select(a => a.OfferingID).Distinct().ToList(); 
+            return distinctIDs;
         }
 
         public List<ArchivedOffering> GroupByOffering(Guid id, List<ArchivedOffering> archivedOfferings)
@@ -168,16 +182,22 @@ namespace CommunityPricing.Pages.Shared
             return ArchivedOfferings;
         }
 
+        public double RationalizeInlfationForYear(double inflationRate, List<XYPOINT> xypoints)
+        {
+            double rationalizedInflation = new double();
+            double span = xypoints.Max(x => x.X) - xypoints.Min(x => x.X);
+            rationalizedInflation = (inflationRate * 365) /span;
+
+            return rationalizedInflation;
+        }
+
         public double ReturnAverage(List<double> mydoubles)
         {
             double doubles = mydoubles.Average();
-            doubles = Math.Round(doubles, 5);
             return doubles;
         }
 
-        
-
-        public double MakeXYPOINTS(List<ArchivedOffering> archivedOfferings)
+        public List<XYPOINT> MakeXYPOINTS(List<ArchivedOffering> archivedOfferings)
         {
             List<XYPOINT> xypoints = new List<XYPOINT>();
 
@@ -191,15 +211,13 @@ namespace CommunityPricing.Pages.Shared
                 xypoints.Add(xyPoint);
             }
             xypoints = xypoints.OrderBy(x => x.X).ToList();
-            double inflationRate = InflationCalculator(xypoints);
-
-            return inflationRate;
+            
+            return xypoints;
         }
 
         public CalculatedInflation InflationHelper(string inflation, int i, string pcName)
         {
             //NumberFormatInfo nfi = new CultureInfo("en-us", false).NumberFormat;
-
             CalculatedInflation calculatedInflation = new CalculatedInflation();
 
             calculatedInflation.InflationID = 1000;
@@ -219,7 +237,7 @@ namespace CommunityPricing.Pages.Shared
 
             double Xavg = xypoints.Average(x => x.X);
             double Yavg = xypoints.Average(y => y.Y);
-
+     
             double numeratorOfSlope = 0;
             double denominatorOfSlope = 0;
 
@@ -231,13 +249,12 @@ namespace CommunityPricing.Pages.Shared
 
             m = numeratorOfSlope / denominatorOfSlope;
             b = Yavg - (m * Xavg);
-           
-            
+                  
             double startprice = xypoints[FindIndexOfMin(xypoints)].X * m + b;
 
             double endprice = xypoints[FindIndexOfMax(xypoints)].X * m + b;
 
-            inflationRate = Math.Round((endprice - startprice) / startprice, 5);
+            inflationRate = (endprice - startprice) / startprice;
 
             return inflationRate;
         }
@@ -246,6 +263,7 @@ namespace CommunityPricing.Pages.Shared
         {
             int indexOfMin = 0;
             XYPOINT min = xyPoints[0];
+
             for (int i = 0; i < xyPoints.Count; i++)
             {
                 if(xyPoints[i].X < min.X)

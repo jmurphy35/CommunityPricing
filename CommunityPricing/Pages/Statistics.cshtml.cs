@@ -57,7 +57,7 @@ namespace CommunityPricing.Pages
                     int length = DateTime.Now.Year - oldestDate.Year + 1;
                     for (int i = 0; i < length; i++)
                     {
-                        CalculatedInflation calculatedInflation = GroupByYear(archivesInCategory, oldestDate, pc.Name, i);
+                        CalculatedInflation calculatedInflation = MakeCalculatedInflation(archivesInCategory, pc.Name, i);
                         calculatedInflations.Add(calculatedInflation);
                     }
                 }
