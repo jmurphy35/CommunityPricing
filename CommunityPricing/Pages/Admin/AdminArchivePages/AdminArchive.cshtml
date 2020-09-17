@@ -12,21 +12,14 @@
         <p>
             <input type="text" name="searchStringFirst" value="@Model.CurrentFilterFirst" />
             <input type="text" name="searchStringSecond" value="@Model.CurrentFilterSecond" />
+            <strong>&nbsp;(Product Name - Product Type)&nbsp;</strong>
             <input type="submit" value="Search" class="btn btn-default">
-            <a asp-page="./AdminArchive">Enter a filter</a>
         </p>
     </div>
 </form>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                <a asp-page="./AdminArchive" asp-route-sortOrder="@Model.VendorNameSort"
-                   asp-route-currentFilterFirst="@Model.CurrentFilterFirst"
-                   asp-route-currentFilterSecond="@Model.CurrentFilterSecond">
-                    @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorName)
-                </a>
-            </th>
             <th>
                 <a asp-page="./AdminArchive" asp-route-sortOrder="@Model.ProductNameSort"
                    asp-route-currentFilterFirst="@Model.CurrentFilterFirst"
@@ -41,7 +34,11 @@
                 @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Product.Wholesaler)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorName)
+                <a asp-page="./AdminArchive" asp-route-sortOrder="@Model.VendorNameSort"
+                   asp-route-currentFilterFirst="@Model.CurrentFilterFirst"
+                   asp-route-currentFilterSecond="@Model.CurrentFilterSecond">
+                    @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorName)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ArchivedOffering[0].Offering.Vendor.VendorAddress1)
@@ -59,9 +56,6 @@
     <tbody>
 @foreach (var item in Model.ArchivedOffering) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Offering.Vendor.VendorName)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Offering.Product.ProductName)
             </td>
