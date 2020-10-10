@@ -49,8 +49,7 @@ namespace CommunityPricing.Pages
             {
                 List<ArchivedOffering> archivesInCategory = pc.Product.SelectMany(o => o.Offering.SelectMany(ao => ao
                .ArchivedOffering.Where(aoVal => aoVal.Price.HasValue).Where(aoDate => aoDate.Date != null))).ToList();
-
-                
+       
                 if (archivesInCategory.Count != 0)
                 {
                     DateTime oldestDate = archivesInCategory.Min(aoDate => aoDate.Date);
