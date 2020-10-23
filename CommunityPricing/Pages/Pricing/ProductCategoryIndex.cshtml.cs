@@ -29,7 +29,7 @@ namespace CommunityPricing.Pages.GeneralPublic
             _context = context;
         }
 
-        public PaginatedList<ProductCategory> ProductCategory { get;set; }
+        public PaginatedList<ProductCategory> ProductCategory { get; set; }
 
         public string NameSort { get; set; }
         public string CurrentFilter { get; set; }
@@ -40,7 +40,7 @@ namespace CommunityPricing.Pages.GeneralPublic
         {
             CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            if(searchString != null)
+            if (searchString != null)
             {
                 pageIndex = 1;
             }
@@ -52,11 +52,11 @@ namespace CommunityPricing.Pages.GeneralPublic
 
             IQueryable<ProductCategory> ProductCategoryIQ = from pc in _context.ProductCategory
                                                             select pc;
-            if(!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 ProductCategoryIQ = ProductCategoryIQ.Where(pc => pc.Name.Contains(searchString));
             }
-            
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -71,10 +71,10 @@ namespace CommunityPricing.Pages.GeneralPublic
             int pageSize = 20;
             ProductCategory = await PaginatedList<ProductCategory>.CreateAsync(ProductCategoryIQ.AsNoTracking(),
                 pageIndex ?? 1, pageSize);
-           
-          
+
+
         }
 
-       
+
     }
 }

@@ -1,0 +1,13 @@
+﻿.startIndexTable {
+    margin-left:200px;
+    margin-right:600px;
+}
+.pageClassAlpha{
+    float:right;
+    margin-right:200px;
+}
+.pageClassBeta{
+    float:left;
+    margin-left:50px;
+    word-wrap:hyphenate;
+}

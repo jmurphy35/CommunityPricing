@@ -10,11 +10,11 @@
 
 <form asp-page="./ProductCategoryIndex" method="get">
     <div class="form-actions no-color">
-        @*<p>
-            Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+        <p>
+            @*Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
             <input type="submit" value="Search" class="btn btn-default">
-            <a asp-page="./ProductCategoryIndex">Back To Full List</a>
-        </p>*@
+            <a asp-page="./ProductCategoryIndex">Back To Full List</a>*@
+        </p>
     </div>
 </form>
 
@@ -26,8 +26,7 @@
                    asp-route-currentFilter="@Model.CurrentFilter">
                     @Html.DisplayNameFor(model => model.ProductCategory[0].Name)
                 </a>
-            </th>
-            
+            </th>        
         </tr>
     </thead>
     <tbody>
@@ -39,8 +38,6 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </a>
             </td>
-            
-
         </tr>
         }
     </tbody>
@@ -64,3 +61,5 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+<br><br>
+<a asp-page="/Index">Back to Welcome Page</a>
