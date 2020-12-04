@@ -1,0 +1,51 @@
+﻿.startIndexTable {
+    margin-left:100px;
+    margin-right:600px;
+}
+
+.blockClassA {
+    display:inline;
+    width: 20%;
+    float: right;
+    margin-left: 20px;
+    margin-right: 60px;
+    border: 2px solid #337ab7;
+    background-color: #eee;
+    text-decoration: none;
+}
+
+    .blockClassA > h5 {
+        padding-left:20px;
+        padding-right:20px;
+        border-bottom:solid;
+        border-width:1px;
+        border-color:#337ab7;
+    }
+    .blockClassA > ul {
+        padding-left:20px;
+        padding-right:20px;
+        padding-bottom:10px;
+        list-style-type: none;
+        margin:0;
+        overflow:auto;
+    }
+
+
+.blockClassB {
+    display: inline;
+    width: 80%;
+    max-width: 900px;
+    margin-left: 50px;
+    word-wrap: hyphenate;
+    overflow:auto;
+}
+.rowIndent{
+    text-indent:-2em;
+    margin-right:-15px;
+    margin-left:45px;
+}
+}
+.blockClassC {
+    clear: both;
+}
+

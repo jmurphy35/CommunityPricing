@@ -37,7 +37,7 @@ namespace CommunityPricing
 
             services.AddDbContext<CommunityPricingContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));           
+                    Configuration.GetConnectionString("DefaultConnection")));      
 
             services.Configure<IdentityOptions>(options =>
             {

@@ -9,7 +9,7 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/StyleSheet.css" />
+        <link rel="stylesheet" href="~/css/customStyles.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -17,7 +17,8 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    
+    <link rel="stylesheet" href="~/css/customStyles.css" asp-append-version="true"/>
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -33,13 +34,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">Welcome</a></li>
+                    <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="/Pricing/ProductCategoryIndex">Product Categories</a></li>
                     <li><a asp-page="/Statistics">Statistics</a></li>
                     <li><a asp-page="/News">News</a></li>
                     <li><a asp-page="/About">About</a></li>
                     <li><a asp-page="/PermittedMembers/PMGate">Contributors Entrance</a></li>
                     <li><a asp-page="/Admin/AdminGate">Admin</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
 
 
                 </ul>

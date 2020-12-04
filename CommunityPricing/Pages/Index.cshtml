@@ -2,42 +2,43 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
 <body>
-<div class="jumbotron">
-    <a asp-page="/Pricing/ProductCategoryIndex"><h1><span>Community Pricing</span></h1></a>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Welcome to Community Pricing</h2>
+    <div class="jumbotron">
+        <a asp-page="/Pricing/ProductCategoryIndex"><h1><span>Community Pricing</span></h1></a>
     </div>
-</div>
-
-<div class="startIndexTable">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductCategoryDMList[0].Name)
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model.ProductCategoryDMList)
-            {
+    <div class="rowIndent">
+        <div class="col-md-4">
+            <h4><strong>Community Pricing</strong> - a survey of common products, prices, and vendors local to eastern Massachusetts</h4>
+        </div>
+    </div>
+    <hr class="blockClassC" />
+    <div class="startIndexTable">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        <a asp-page="./Pricing/ProductIndex" asp-route-productCategoryId="@item.Number">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </a>
-
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductCategoryDMList[0].Name)
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
-    </body>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.ProductCategoryDMList)
+                {
+                    <tr>
+                        <td>
+                            <a asp-page="./Pricing/ProductIndex" asp-route-productCategoryId="@item.Number">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
 
