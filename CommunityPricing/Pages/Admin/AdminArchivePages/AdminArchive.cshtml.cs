@@ -80,6 +80,7 @@ namespace CommunityPricing.Pages.Admin
 
                             .ThenBy(aO => aO.Offering.Product.ProductName)
                             .ThenBy(aO => aO.Offering.Product.ProductDescr1)
+                            .ThenBy(aO => aO.Offering.Product.Wholesaler)
                             .ThenBy(aO => aO.Date);
                         break;
 
@@ -96,7 +97,8 @@ namespace CommunityPricing.Pages.Admin
                         archivedOfferingIQ = archivedOfferingIQ.OrderBy(aO => aO.Offering.Product.ProductName)
 
                             .ThenBy(aO => aO.Offering.Product.ProductDescr1)
-                            .ThenBy(ao => ao.Offering.Vendor.VendorName)
+                            .ThenBy(aO => aO.Offering.Product.Wholesaler)
+                            .ThenBy(ao => ao.Offering.Vendor.VendorName)      
                             .ThenBy(aO => aO.Date)
                             .ThenBy(aO => aO.Offering.Product.Wholesaler);
                         break;

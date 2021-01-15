@@ -9,6 +9,7 @@ namespace CommunityPricing.Areas.Models.HelperModels
     {
         public int VendorID { get; set; }
         public string VendorName { get; set; }
+        public string VendorAddress { get; set; }
         public bool Designated { get; set; }
     }
 }

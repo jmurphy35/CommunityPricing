@@ -55,6 +55,8 @@ namespace CommunityPricing.Pages.Shared
                 DesignatedVendor desVend = new DesignatedVendor();
                 desVend.VendorID = vendor.VendorID;
                 desVend.VendorName = vendor.VendorName;
+                desVend.VendorAddress = vendor.VendorAddress1 + ", " + vendor.VendorAddress2;
+               
                 if (OfferingsHS.Contains(vendor.VendorID))
                 {
                     desVend.Designated = true;

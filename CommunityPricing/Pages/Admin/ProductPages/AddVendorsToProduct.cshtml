@@ -33,11 +33,15 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DesignatedVendorList[0].VendorID)
                 </th>
+
                 <th>
                     <a asp-page="./AddVendorsToProduct" asp-route-id="@Model.ProductID" asp-route-sortOrder="@Model.NameSort"
                        asp-route-currentFilter="@Model.CurrentFilter">
                         @Html.DisplayNameFor(model => model.DesignatedVendorList[0].VendorName)
                     </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DesignatedVendorList[0].VendorAddress)
                 </th>
 
             </tr>
@@ -45,26 +49,28 @@
         <tbody>
             @foreach (var item in Model.DesignatedVendorList)
             {
-                <tr>
-                    <td>
-                        <input type="hidden"
-                               name="sortedVendors"
-                               value="@item.VendorID"
-                               @Html.Raw(item.VendorID) />
+            <tr>
+                <td>
+                    <input type="hidden"
+                           name="sortedVendors"
+                           value="@item.VendorID"
+                           @Html.Raw(item.VendorID) />
 
-                        <input type="checkbox"
-                               name="selectedVendors"
-                               value="@item.VendorID"
-                               @(Html.Raw(item.Designated ? "checked=\"checked\"" : "")) />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VendorID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VendorName)
-                    </td>
-
-                </tr>
+                    <input type="checkbox"
+                           name="selectedVendors"
+                           value="@item.VendorID"
+                           @(Html.Raw(item.Designated ? "checked=\"checked\"" : "")) />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorAddress)
+                </td>
+            </tr>
             }
         </tbody>
     </table>

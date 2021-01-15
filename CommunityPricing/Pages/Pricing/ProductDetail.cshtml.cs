@@ -70,7 +70,6 @@ namespace CommunityPricing.Pages.GeneralPublic
                     break;
             }
             
-
             if (productId == null)
             {
                 return NotFound();
@@ -82,8 +81,6 @@ namespace CommunityPricing.Pages.GeneralPublic
                 .ThenInclude(v => v.Vendor)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ProductID == productId);
-
-         
 
             if (Product == null)
             {

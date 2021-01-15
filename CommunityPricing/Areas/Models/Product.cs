@@ -23,7 +23,7 @@ namespace CommunityPricing.Models
         [Column("DescrOne")]
         public string ProductDescr1 { get; set; }
 
-        [Display(Name = "Weight(or Volume)")]
+        [Display(Name = "per Weight(or Volume)")]
         [StringLength(20, ErrorMessage = "Product Description cannot be longer than 20 characters.")]
         [Column("Weight_Volume")]
         public string ProductDescr2_Wt_Vol { get; set; }
