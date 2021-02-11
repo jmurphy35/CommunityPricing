@@ -82,7 +82,7 @@ namespace CommunityPricing.Pages.GeneralPublic
                         .ThenBy(p => p.ProductDescr1);
                     break;
             }
-            int pageSize = 7;
+            int pageSize = 10;
             Product = await PaginatedList<Product>.CreateAsync(ProductIQ.AsNoTracking(), pageIndex ?? 1,
                 pageSize); 
         }

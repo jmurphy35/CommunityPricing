@@ -53,8 +53,16 @@
     margin-right:-15px;
     margin-left:45px;
 }
-}
+
 .blockClassC {
     clear: both;
 }
 
+
+.navbar{
+    background-color:#222;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color:#9d9d9d;
+}

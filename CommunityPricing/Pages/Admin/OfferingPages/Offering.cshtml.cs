@@ -15,7 +15,7 @@ using CommunityPricing.Pages.Shared;
 
 namespace CommunityPricing.Pages.Admin.OfferingPages
 {
-    public class OfferingModel : DI_BasePageModel
+    public class OfferingModel : VendorSelectList
     {
         private readonly CommunityPricing.Data.CommunityPricingContext _context;
 
@@ -31,14 +31,14 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
         public string CurrentSort { get; set; }
         public int PageIndex { get; set; }
         public string Message { get; set; }
-        public PaginatedList<Offering> Offering { get;set; }
-        
+        public PaginatedList<Offering> Offering { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string message, string sortOrder, string currentFilter,
-            string searchString, int? pageIndex)
+             string searchString, int? pageIndex)
         {
             Message = message;
             CurrentSort = sortOrder;
-            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "" ;
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             if (searchString != null)
             {
                 pageIndex = 1;
@@ -49,16 +49,23 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
             }
             CurrentFilter = searchString;
 
+            MakeVendorSelectList(_context);
+
             IQueryable<Offering> offeringIQ = from o in _context.Offering
                                               .Include(p => p.Product)
                                               .Include(v => v.Vendor)
                                               select o;
-
-            if(!String.IsNullOrEmpty(searchString))
+ 
+            if(searchString == "all" || searchString == null)
             {
-                offeringIQ = offeringIQ.Where(o => o.Vendor.VendorName.Contains(searchString));
+
             }
-            
+            else
+            {
+                offeringIQ = offeringIQ.Where(o => o.Vendor.VendorID.ToString() == searchString);
+            }
+
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -76,10 +83,13 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
             Offering = await PaginatedList<Offering>.CreateAsync(offeringIQ, pageIndex ?? 1, pageSize);
             PageIndex = Offering.PageIndex;
 
+
+
+
             Offering offering = new Offering();
             var isAuthorized = await AuthorizationService.AuthorizeAsync(User, offering, Operations.Read);
-            
-            if(!isAuthorized.Succeeded)
+
+            if (!isAuthorized.Succeeded)
             {
                 return new ChallengeResult();
             }
@@ -92,7 +102,7 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
 
             foreach (var offering in Offering)
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return Page();
                 }
@@ -109,12 +119,12 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
                     "offering",
                     o => o.ProductPricePerWeight, o => o.AsOfDate))
                 {
-                    
+
                 }
 
             }
             try
-            {  
+            {
                 await _context.SaveChangesAsync();
                 await ArchiveOffering.Archive(_context);
 
@@ -134,7 +144,7 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
 
                 var dbValues = (Offering)databaseEntry.ToObject();
                 setDbErrorMessage(dbValues, clientValues, _context);
-                
+
                 ModelState.Remove("RowVersion");
                 string message = "The record you attempted to edit "
                                 + "was modified by another user after you. The "
@@ -142,10 +152,15 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
                                 + "have been displayed. TO EDIT THIS RECORD, RE-ENTER YOUR VALUES."
                                 + "Otherwise the other user would not be aware that you had overwritten those entries";
 
-                return RedirectToPage("./Offering", new { message, sortOrder = CurrentSort,
-                    currentFilter = CurrentFilter, pageIndex = PageIndex});
+                return RedirectToPage("./Offering", new
+                {
+                    message,
+                    sortOrder = CurrentSort,
+                    currentFilter = CurrentFilter,
+                    pageIndex = PageIndex
+                });
             }
-            
+
         }
 
         private void setDbErrorMessage(Offering dbValues, Offering clientValues, CommunityPricingContext _context)
@@ -163,7 +178,7 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
         {
             List<Offering> Offerings = await _context.Offering.ToListAsync();
             List<ArchivedOffering> ArchivedOfferings = await _context.ArchivedOffering.ToListAsync();
-            
+
         }
     }
 }

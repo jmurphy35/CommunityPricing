@@ -65,7 +65,8 @@ namespace CommunityPricing.Pages.PermittedMembers
                             if (vendorToMatchList.Any(v => v.VendorID == id))
                             {
                                 VendorId = id;
-                                authVendor = true;
+                                //A bit too easy to hack in
+                                //authVendor = true;
                             }
                             else
                             {

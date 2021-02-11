@@ -9,13 +9,30 @@
 <h2>Offering</h2>
 
 <form asp-page="./Offering" method="get">
-    <div class="form-actions no-color">
+    @*<div class="form-actions no-color">
+            <p>
+                <input type="text" name="searchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="Search" class="btn btn-default">
+                <a asp-page="./Offering">Back To Full List</a>
+            </p>
+
+        </div>*@
+
+    <div class="form-group">
         <p>
-            <input type="text" name="searchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Search" class="btn btn-default">
-            <a asp-page="./Offering">Back To Full List</a>
+            @*<label asp-for="Offerings" class="control-label"></label>*@
+            <select class="form-control"
+                    name="searchString"
+                    asp-for="@Model.VendorSL"
+                    asp-items="@Model.VendorSL">
+                <option value="">--select vendor--</option>
+                <option value="all">--all vendors--</option>
+            </select>
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+
         </p>
     </div>
+    @*<a asp-page="./Index">Back to full List</a>*@
 </form>
 @using (Html.BeginForm())
 {
