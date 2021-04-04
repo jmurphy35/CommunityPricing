@@ -66,7 +66,7 @@ namespace CommunityPricing.Pages.PermittedMembers
                 {
                     return new ChallengeResult();
                 }
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
                 return RedirectToPage("./PMGate");
             }
             else

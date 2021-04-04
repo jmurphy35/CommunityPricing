@@ -53,8 +53,8 @@ namespace CommunityPricing.Pages.Admin.AdminArchivePages
 
             if (ArchivedOffering != null)
             {
-                _context.ArchivedOffering.Remove(ArchivedOffering);
-                await _context.SaveChangesAsync();
+                //_context.ArchivedOffering.Remove(ArchivedOffering);
+                //await _context.SaveChangesAsync();
             }
 
             return RedirectToPage("./AdminArchive");

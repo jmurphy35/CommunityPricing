@@ -82,7 +82,7 @@ namespace CommunityPricing.Pages.Admin.ProductCategoryPages
             {
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                     return RedirectToPage("./Index");
                 }
                 catch (DbUpdateConcurrencyException ex)

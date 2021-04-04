@@ -68,8 +68,8 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             {
                 Guid guid = Guid.NewGuid();
                 productToUpdate.ProductID = guid;
-                _context.Product.Add(productToUpdate);
-                await _context.SaveChangesAsync();
+                //_context.Product.Add(productToUpdate);
+                //await _context.SaveChangesAsync();
 
                 return RedirectToPage("./Index");
             }

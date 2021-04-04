@@ -84,7 +84,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             {
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                     if (submitProduct == "SaveAndEditVendors")
                     {
                         return RedirectToPage("./AddVendorsToProduct", id);

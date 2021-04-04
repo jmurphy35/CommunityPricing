@@ -82,8 +82,8 @@ namespace CommunityPricing.Pages.Admin.VendorPages
             
             try
             {
-                _context.Vendor.Remove(Vendor);
-                await _context.SaveChangesAsync();
+                //_context.Vendor.Remove(Vendor);
+                //await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
             catch (DbUpdateException)

@@ -38,6 +38,12 @@ namespace CommunityPricing.Pages.Admin.ProductPages
         public async Task<IActionResult> OnGetAsync(Guid id, string sortOrder, string currentFilter,
             string searchString, int? pageIndex)
         {
+            Vendor vendorForAuth = new Vendor();
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, vendorForAuth, Operations.Read);
+            if (!isAuthorized.Succeeded)
+            {
+                return new ChallengeResult();
+            }
             ProductID = id;
             CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -72,12 +78,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             PageIndex = Vendor.PageIndex;
             MakeDesignatedVendorList(Vendor, id);
 
-            Vendor vendorForAuth = new Vendor();
-            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, vendorForAuth, Operations.Read);
-            if (!isAuthorized.Succeeded)
-            {
-                return new ChallengeResult();
-            }
+            
             return Page();
         }
 
@@ -92,7 +93,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
                 "productToUpdate"))
             {
                 UpdateOfferings(productID, sortedVendors, selectedVendors);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
             }
             else
             {

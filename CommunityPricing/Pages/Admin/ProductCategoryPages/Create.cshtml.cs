@@ -66,8 +66,8 @@ namespace CommunityPricing.Pages.Admin.ProductCategoryPages
                 {
                     try
                     {
-                        _context.ProductCategory.Add(productCategoryToUpdate);
-                        await _context.SaveChangesAsync();
+                        //_context.ProductCategory.Add(productCategoryToUpdate);
+                        //await _context.SaveChangesAsync();
                         Message = null;
                         return RedirectToPage("./Index");
                     }

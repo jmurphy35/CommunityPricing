@@ -65,8 +65,8 @@ namespace CommunityPricing.Pages.Admin.VendorPages
                 {
                     try
                     {
-                        _context.Vendor.Add(vendorToUpdate);
-                        await _context.SaveChangesAsync();
+                        //_context.Vendor.Add(vendorToUpdate);
+                        //await _context.SaveChangesAsync();
                         Message = null;
                         return RedirectToPage("./Index");
                     }

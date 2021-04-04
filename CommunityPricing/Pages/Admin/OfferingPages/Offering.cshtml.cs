@@ -125,7 +125,7 @@ namespace CommunityPricing.Pages.Admin.OfferingPages
             }
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
                 await ArchiveOffering.Archive(_context);
 
                 Message = null;

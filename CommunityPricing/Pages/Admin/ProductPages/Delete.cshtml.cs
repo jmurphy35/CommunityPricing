@@ -34,6 +34,14 @@ namespace CommunityPricing.Pages.Admin.ProductPages
 
         public async Task<IActionResult> OnGetAsync(Guid? id, bool? saveChangesError = false)
         {
+            //*********************Authorization*************************************************************
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, Product, Operations.Delete);
+
+            if (!isAuthorized.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+            //***********************************************************************************************
             if (id == null)
             {
                 return NotFound();
@@ -81,8 +89,8 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             }
             try
             {
-                _context.Product.Remove(Product);
-                await _context.SaveChangesAsync();
+                //_context.Product.Remove(Product);
+                //await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
             catch (DbUpdateException)

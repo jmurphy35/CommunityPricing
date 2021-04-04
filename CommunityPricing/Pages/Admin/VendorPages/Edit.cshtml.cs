@@ -81,7 +81,7 @@ namespace CommunityPricing.Pages.Admin.VendorPages
             {
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                     return RedirectToPage("./Index");
                 }
                 catch (DbUpdateConcurrencyException ex)

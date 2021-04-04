@@ -36,7 +36,20 @@ namespace CommunityPricing.Pages.Admin.ProductPages
         public async Task OnGetAsync(string sortOrder, string currentFilter,
             string searchString, int? pageIndex)
         {
-//********************SortFilterPage*************************************************************************
+
+            //***********************Authorization***********************************************************************
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, Product, Operations.Read);
+
+            if (!isAuthorized.Succeeded)
+            {
+                new ChallengeResult();
+            }
+            //**********************************************************************************************************
+
+
+
+            //********************SortFilterPage*************************************************************************
 
 
 
@@ -73,19 +86,10 @@ namespace CommunityPricing.Pages.Admin.ProductPages
 
             int pageSize = 9;
             Product = await PaginatedList<Product>.CreateAsync(ProductIQ, pageIndex ?? 1, pageSize);
-//************************************************************************************************************
-            
+            //************************************************************************************************************
 
 
-//***********************Authorization***********************************************************************
 
-            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, Product, Operations.Read);
-
-            if(!isAuthorized.Succeeded)
-            {
-                new ChallengeResult();
-            }
- //**********************************************************************************************************
  
         }
     }
