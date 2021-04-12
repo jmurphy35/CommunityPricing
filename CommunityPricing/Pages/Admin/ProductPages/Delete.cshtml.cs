@@ -89,8 +89,8 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             }
             try
             {
-                //_context.Product.Remove(Product);
-                //await _context.SaveChangesAsync();
+                _context.Product.Remove(Product);
+                await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
             catch (DbUpdateException)

@@ -60,7 +60,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid? id, string submitProduct)
+        public async Task<IActionResult> OnPostAsync(Guid id, string submitProduct)
         {
             if (!ModelState.IsValid)
             {
@@ -84,10 +84,10 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             {
                 try
                 {
-                    //await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                     if (submitProduct == "SaveAndEditVendors")
                     {
-                        return RedirectToPage("./AddVendorsToProduct", id);
+                        return RedirectToPage("./AddVendorsToProduct", new { id });
                     }
                     else
                     {

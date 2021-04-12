@@ -1,11 +1,12 @@
-﻿.startIndexTable {
+﻿
+.startIndexTable {
     margin-left:100px;
     margin-right:600px;
 }
 
 .blockClassA {
     display:inline;
-    width: 20%;
+    width: 22%;
     float: right;
     margin-left: 10px;
     margin-right: 10px;
@@ -37,8 +38,9 @@
         margin-right: auto;
         text-space-collapse: collapse;
         overflow: auto;
+        white-space:nowrap;
     }
-
+    
 
 .blockClassB {
     display: inline;

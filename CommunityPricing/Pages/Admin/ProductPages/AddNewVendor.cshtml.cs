@@ -88,7 +88,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
                             });      
                         }
                         else { }
-                        //await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {

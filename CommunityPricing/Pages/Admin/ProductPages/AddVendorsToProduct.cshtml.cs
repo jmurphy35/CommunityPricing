@@ -93,7 +93,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
                 "productToUpdate"))
             {
                 UpdateOfferings(productID, sortedVendors, selectedVendors);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             else
             {
