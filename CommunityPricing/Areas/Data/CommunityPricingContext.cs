@@ -20,5 +20,7 @@ namespace CommunityPricing.Data
         public DbSet<CommunityPricing.Models.Offering> Offering { get; set; }
         public DbSet<CommunityPricing.Models.ArchivedOffering> ArchivedOffering { get; set; }
 
+        
+
     }
 }

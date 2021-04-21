@@ -45,6 +45,26 @@ namespace CommunityPricing
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
 
+        public static async Task<PaginatedList<T>> CreateFromManyAsync(IQueryable<T> sourceOne,
+            IQueryable<T> sourceTwo, int pageIndex, int pageSize)
+        {
+            var count = await sourceOne.CountAsync();
+            var countTwo = await sourceTwo.CountAsync();
+            var TotalCount = count + countTwo;
+            IList<T> listOne = sourceOne.ToList();
+            IList<T> listTwo = sourceTwo.ToList();
+
+            foreach (var item in listTwo)
+            {
+                listOne.Add(item);
+            }
+            
+            var items = listOne.Skip(
+                (pageIndex - 1) * pageSize)
+                .Take(pageSize).ToList();
+            return new PaginatedList<T>(items, TotalCount, pageIndex, pageSize);
+        }
+
         public static PaginatedList<T> CreateNonAsync(
             List<T> source, int pageIndex, int pageSize)
         {
@@ -54,6 +74,7 @@ namespace CommunityPricing
                 .Take(pageSize).ToList();
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
+       
     }
 
 }

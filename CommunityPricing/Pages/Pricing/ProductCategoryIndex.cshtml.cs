@@ -12,12 +12,12 @@ using Microsoft.AspNetCore.Identity;
 using CommunityPricing.Areas.Data;
 using CommunityPricing.Areas.Authorization;
 using CommunityPricing.Pages.Shared;
-using CommunityPricing;
+
 
 namespace CommunityPricing.Pages.GeneralPublic
 {
     [AllowAnonymous]
-    public class ProductCategoryIndexModel : DI_BasePageModel
+    public class ProductCategoryIndexModel : ListHelper
     {
         private readonly CommunityPricing.Data.CommunityPricingContext _context;
 
@@ -34,6 +34,7 @@ namespace CommunityPricing.Pages.GeneralPublic
         public string NameSort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
+
 
         public async Task OnGetAsync(string sortOrder,
             string currentFilter, string searchString, int? pageIndex)
@@ -52,6 +53,7 @@ namespace CommunityPricing.Pages.GeneralPublic
 
             IQueryable<ProductCategory> ProductCategoryIQ = from pc in _context.ProductCategory
                                                             select pc;
+            
             if (!String.IsNullOrEmpty(searchString))
             {
                 ProductCategoryIQ = ProductCategoryIQ.Where(pc => pc.Name.Contains(searchString));
@@ -67,14 +69,24 @@ namespace CommunityPricing.Pages.GeneralPublic
                     ProductCategoryIQ = ProductCategoryIQ.OrderBy(pc => pc.Name);
                     break;
             }
+           
+            int endRange = 7000;
 
+
+            IQueryable<ProductCategory> PrimeListIQ = from pc in _context.ProductCategory
+                                                        where pc.ProductCategoryID >= endRange
+                                                        select pc;
+            IQueryable<ProductCategory> ProductCategoryRemainderIQ = from pc in _context.ProductCategory
+                                                                     where pc.ProductCategoryID < endRange
+                                                                     select pc;
+            
             int pageSize = 20;
-            ProductCategory = await PaginatedList<ProductCategory>.CreateAsync(ProductCategoryIQ.AsNoTracking(),
-                pageIndex ?? 1, pageSize);
 
-
+            ProductCategory = await PaginatedList<ProductCategory>.CreateFromManyAsync(PrimeListIQ,
+                ProductCategoryRemainderIQ, pageIndex ?? 1, pageSize);
+           
         }
-
+        
 
     }
 }

@@ -20,13 +20,25 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.ProductCategoryDMList[0].Name)
+                        @Html.DisplayNameFor(model => model.ProductCategoryDMListFood[0].Name)
                     </th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach (var item in Model.ProductCategoryDMList)
+                @foreach (var item in Model.ProductCategoryDMListFood)
+                {
+                    <tr>
+                        <td>
+                            <a asp-page="./Pricing/ProductIndex" asp-route-productCategoryId="@item.Number">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+                <tr><td></td></tr>
+                @foreach (var item in Model.ProductCategoryDMListNonFood)
                 {
                     <tr>
                         <td>

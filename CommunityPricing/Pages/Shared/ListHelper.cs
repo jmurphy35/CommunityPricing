@@ -27,11 +27,27 @@ namespace CommunityPricing.Pages.Shared
             _context = context;
         }
 
-        
+
         public List<ArchivedOffering> ArchivedOffering { get; set; }
-        public List<ProductCategory> ProductCategory { get; set; }
+        //public List<ProductCategory> ProductCategory { get; set; }
         public List<DesignatedVendor> DesignatedVendorList { get; set; }
-        
+        public List<ProductCategory> Remainder { get; set; }
+
+        public async Task<List<ProductCategory>> MakeRevisedCategoryList(int start, int end)
+        {
+            IQueryable<ProductCategory> ListIQ = from pc in _context.ProductCategory
+                                                 select pc;
+            IQueryable<ProductCategory> ExcludeListIQ = from pc in _context.ProductCategory
+                                                        where pc.ProductCategoryID >= start && pc.ProductCategoryID <= end
+                                                        select pc;
+
+            List<ProductCategory> ProductCategory = new List<ProductCategory>();
+
+            List<ProductCategory> revisedList = await ListIQ.Except(ExcludeListIQ).ToListAsync();
+            return ProductCategory = revisedList.ToList();
+
+        }
+
 
         public class XYPOINT
         {
@@ -56,7 +72,7 @@ namespace CommunityPricing.Pages.Shared
                 desVend.VendorID = vendor.VendorID;
                 desVend.VendorName = vendor.VendorName;
                 desVend.VendorAddress = vendor.VendorAddress1 + ", " + vendor.VendorAddress2;
-               
+
                 if (OfferingsHS.Contains(vendor.VendorID))
                 {
                     desVend.Designated = true;
@@ -113,7 +129,7 @@ namespace CommunityPricing.Pages.Shared
                 {
                     archivedPrices.Add((double)ao.Price);
                 }
-            } 
+            }
             return archivedPrices;
         }
         //-------------------------------------------------------------------------------------------------------------
@@ -123,11 +139,11 @@ namespace CommunityPricing.Pages.Shared
 
             List<ArchivedOffering> AnnualArchives = MakeAnnualArchives(allPcArchives, i);
             List<Guid> distinctIDs = FindDistinctOfferingIDs(AnnualArchives);
-            
+
             List<double> inflationsForOfferings = new List<double>();
             foreach (var id in distinctIDs)
             {
-                List<XYPOINT> xYPOINTs; 
+                List<XYPOINT> xYPOINTs;
                 double inflationForOffering;
                 double rationalizedInflation;
                 List<ArchivedOffering> archivesPerOffering = GroupByOffering(id, AnnualArchives);
@@ -166,8 +182,8 @@ namespace CommunityPricing.Pages.Shared
             return AnnualArchives;
         }
         public List<Guid> FindDistinctOfferingIDs(List<ArchivedOffering> archivesCurrentYear)
-        {     
-            List<Guid> distinctIDs = archivesCurrentYear.Select(a => a.OfferingID).Distinct().ToList(); 
+        {
+            List<Guid> distinctIDs = archivesCurrentYear.Select(a => a.OfferingID).Distinct().ToList();
             return distinctIDs;
         }
 
@@ -188,7 +204,7 @@ namespace CommunityPricing.Pages.Shared
         {
             double rationalizedInflation = new double();
             double span = xypoints.Max(x => x.X) - xypoints.Min(x => x.X);
-            rationalizedInflation = (inflationRate * 365) /span;
+            rationalizedInflation = (inflationRate * 365) / span;
 
             return rationalizedInflation;
         }
@@ -213,7 +229,7 @@ namespace CommunityPricing.Pages.Shared
                 xypoints.Add(xyPoint);
             }
             xypoints = xypoints.OrderBy(x => x.X).ToList();
-            
+
             return xypoints;
         }
 
@@ -233,13 +249,13 @@ namespace CommunityPricing.Pages.Shared
 
         public double InflationCalculator(List<XYPOINT> xypoints)
         {
-            
+
             double inflationRate = 0;
             double m = 0; double b = 0;
 
             double Xavg = xypoints.Average(x => x.X);
             double Yavg = xypoints.Average(y => y.Y);
-     
+
             double numeratorOfSlope = 0;
             double denominatorOfSlope = 0;
 
@@ -251,7 +267,7 @@ namespace CommunityPricing.Pages.Shared
 
             m = numeratorOfSlope / denominatorOfSlope;
             b = Yavg - (m * Xavg);
-                  
+
             double startprice = xypoints[FindIndexOfMin(xypoints)].X * m + b;
 
             double endprice = xypoints[FindIndexOfMax(xypoints)].X * m + b;
@@ -268,7 +284,7 @@ namespace CommunityPricing.Pages.Shared
 
             for (int i = 0; i < xyPoints.Count; i++)
             {
-                if(xyPoints[i].X < min.X)
+                if (xyPoints[i].X < min.X)
                 {
                     min = xyPoints[i];
                     indexOfMin = i;

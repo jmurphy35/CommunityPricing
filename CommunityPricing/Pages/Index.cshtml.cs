@@ -15,7 +15,7 @@ using CommunityPricing.Models;
 namespace CommunityPricing.Pages
 {
     [AllowAnonymous]
-    public class IndexModel : DI_BasePageModel
+    public class IndexModel : ListHelper
     {
         private readonly CommunityPricing.Data.CommunityPricingContext _context;
 
@@ -26,21 +26,40 @@ namespace CommunityPricing.Pages
         {
             _context = context;
         }
+        public List<ProductCategoryDisplayModel> ProductCategoryDMListFood { get; set; }
+        public List<ProductCategoryDisplayModel> ProductCategoryDMListNonFood { get; set; }
+        public List<ProductCategory> ProductCategory { get; set; }
 
-        public List<ProductCategoryDisplayModel> ProductCategoryDMList { get; set; }
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            IQueryable<ProductCategory> ProductCategoryIQ = from pc in _context.ProductCategory
-                                                            select pc;
-            ProductCategoryDMList = new List<ProductCategoryDisplayModel>();
+            int startRange = 1;
+            int endRange = 5000;
 
-            foreach (var pc in ProductCategoryIQ)
+            ProductCategoryDMListFood = new List<ProductCategoryDisplayModel>();
+            ProductCategory = await MakeRevisedCategoryList(startRange, endRange);
+            foreach (var pc in ProductCategory)
             {
                 ProductCategoryDisplayModel pcDm = new ProductCategoryDisplayModel();
                 pcDm.Number = pc.ProductCategoryID;
                 pcDm.Name = pc.Name;
-                ProductCategoryDMList.Add(pcDm);
+                ProductCategoryDMListFood.Add(pcDm);
             }
+            ProductCategoryDMListFood = ProductCategoryDMListFood.OrderBy(pc => pc.Name).ToList();
+
+
+            ProductCategoryDMListNonFood = new List<ProductCategoryDisplayModel>();
+            IQueryable<ProductCategory> RemainingCategories = from pc in _context.ProductCategory
+                                                              where pc.ProductCategoryID <= endRange
+                                                              select pc;
+            ProductCategory = RemainingCategories.ToList();
+            foreach (var item in ProductCategory)
+            {
+                ProductCategoryDisplayModel pcDm = new ProductCategoryDisplayModel();
+                pcDm.Number = item.ProductCategoryID;
+                pcDm.Name = item.Name;
+                ProductCategoryDMListNonFood.Add(pcDm);
+            }
+            ProductCategoryDMListNonFood = ProductCategoryDMListNonFood.OrderBy(pc => pc.Name).ToList();
         }
     }
 }

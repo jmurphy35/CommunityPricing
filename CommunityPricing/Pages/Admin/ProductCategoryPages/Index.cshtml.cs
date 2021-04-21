@@ -36,7 +36,7 @@ namespace CommunityPricing.Pages.Admin.ProductCategoryPages
         public async Task OnGetAsync(string sortOrder, string currentFilter,
             string searchString, int? pageIndex)
         {
-            //*********************PageFilterSort**************************************************************
+            //*********************FilterSortParsePage**************************************************************
 
             CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -68,6 +68,7 @@ namespace CommunityPricing.Pages.Admin.ProductCategoryPages
                     ProductCategoryIQ = ProductCategoryIQ.OrderBy(pc => pc.Name);
                     break;
             }
+
 
             int pageSize = 9;
 
