@@ -51,42 +51,49 @@ namespace CommunityPricing.Pages.GeneralPublic
             }
             CurrentFilter = searchString;
 
-            IQueryable<ProductCategory> ProductCategoryIQ = from pc in _context.ProductCategory
-                                                            select pc;
-            
+            int endRange = 7000;
+
+
+            IQueryable<ProductCategory> PrimeListIQ = from pc in _context.ProductCategory
+                                                      where pc.ProductCategoryID >= endRange
+                                                      select pc;
+            IQueryable<ProductCategory> ProductCategoryRemainderIQ = from pc in _context.ProductCategory
+                                                                     where pc.ProductCategoryID < endRange
+                                                                     select pc;
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                ProductCategoryIQ = ProductCategoryIQ.Where(pc => pc.Name.Contains(searchString));
+
+                //if (PrimeListIQ.Any(pc => pc.Name.Contains(searchString)))
+                //{
+                //    PrimeListIQ = PrimeListIQ.Where(pc => pc.Name.Contains(searchString));
+                //}
+                PrimeListIQ = PrimeListIQ.Where(pc => pc.Name.Contains(searchString));
+                ProductCategoryRemainderIQ = ProductCategoryRemainderIQ.Where(pc => pc.Name.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    ProductCategoryIQ = ProductCategoryIQ.OrderByDescending(pc => pc.Name);
+                    PrimeListIQ = PrimeListIQ.OrderByDescending(pc => pc.Name);
+                    ProductCategoryRemainderIQ = ProductCategoryRemainderIQ.OrderByDescending(pc => pc.Name);
                     break;
 
                 default:
-                    ProductCategoryIQ = ProductCategoryIQ.OrderBy(pc => pc.Name);
+                    PrimeListIQ = PrimeListIQ.OrderBy(pc => pc.Name);
+                    ProductCategoryRemainderIQ = ProductCategoryRemainderIQ.OrderBy(pc => pc.Name);
                     break;
             }
-           
-            int endRange = 7000;
 
 
-            IQueryable<ProductCategory> PrimeListIQ = from pc in _context.ProductCategory
-                                                        where pc.ProductCategoryID >= endRange
-                                                        select pc;
-            IQueryable<ProductCategory> ProductCategoryRemainderIQ = from pc in _context.ProductCategory
-                                                                     where pc.ProductCategoryID < endRange
-                                                                     select pc;
-            
+
             int pageSize = 20;
 
             ProductCategory = await PaginatedList<ProductCategory>.CreateFromManyAsync(PrimeListIQ,
                 ProductCategoryRemainderIQ, pageIndex ?? 1, pageSize);
-           
+
         }
-        
+
 
     }
 }
