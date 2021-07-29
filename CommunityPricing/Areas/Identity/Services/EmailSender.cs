@@ -29,7 +29,7 @@ namespace CommunityPricing.Areas.Identity.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress(email, email),
+                From = new EmailAddress("jmurphy35@gmail.com", Options.SendGridUser),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
@@ -39,10 +39,11 @@ namespace CommunityPricing.Areas.Identity.Services
             // Disable click tracking.
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
 
-            msg.TrackingSettings = new TrackingSettings
-            {
-                ClickTracking = new ClickTracking { Enable = false }
-            };
+            msg.SetClickTracking(false, false);
+            //msg.TrackingSettings = new TrackingSettings
+            //{
+            //    ClickTracking = new ClickTracking { Enable = false }
+            //};
             return client.SendEmailAsync(msg);    
         }
     }

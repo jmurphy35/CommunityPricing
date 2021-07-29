@@ -39,7 +39,10 @@ namespace CommunityPricing
             services.AddDbContext<CommunityPricingContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -58,17 +61,19 @@ namespace CommunityPricing
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CommunityPricingContext>();
+            ////services.AddDefaultIdentity<CommunityPricingContext>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<CommunityPricingContext>();
+            ////services.AddDefaultIdentity<CommunityPricingContext>().AddEntityFrameworkStores<CommunityPricingContext>();
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    // Cookie settings
+            //    options.Cookie.HttpOnly = true;
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                options.SlidingExpiration = true;
-            });
+            //    options.LoginPath = "/Identity/Account/Login";
+            //    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            //    options.SlidingExpiration = true;
+            //});
             services.AddRazorPages();
             services.AddMvc(config =>
             {
@@ -77,8 +82,14 @@ namespace CommunityPricing
                                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
-            services.AddSingleton<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
+            
 
             services.AddSingleton<IAuthorizationHandler, AdministratorsAuthorizationHandler_Vendor>();
             services.AddSingleton<IAuthorizationHandler, AdministatorsAuthorizationHandler_ProductCategory>();

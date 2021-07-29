@@ -87,7 +87,7 @@ namespace CommunityPricing.Pages.Admin.ProductPages
             int pageSize = 9;
             Product = await PaginatedList<Product>.CreateAsync(ProductIQ, pageIndex ?? 1, pageSize);
             //************************************************************************************************************
-
+            
 
 
  
